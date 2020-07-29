@@ -28,101 +28,133 @@ if (!function_exists('is_json')) {
   }
 
 }
+if (!function_exists('check_input_format')) {
+
+  function check_input_format($checker=null,$data=null)
+  {
+    $success=0;
+    $failed=0;
+    $return_data['message']='';
+    $return_data['accept']=1;
+    //MENCOCOKAN FIELD DATA REQUEST YANG DITERIMA
+    if(@count(@$checker)>0 && !empty($checker))
+    {
+        //JIKA DATA IN TIDAK DITEMUKAN NAMUN MENGUNAKAN CHECKER
+        if(!empty(@$data))
+        {
+          //JIKA DATA IN ARRAY
+          if(is_array($data))
+          {
+            //Jika data input berupa array
+            foreach ($data as $key => $row) {
+              foreach ($checker as $key_checker => $row_checker) {
+                if(!empty(@$row->{$key_checker}))
+                {
+
+                }
+                else {
+                  $return_data['accept']=0;
+                  $return_data['message'].=', field "'.$key_checker.'" not found';
+                  $failed++;
+                }
+              }
+            }
+          }
+          //JIKA DATA IN OBJECT ATAU 1 LIST
+          else
+          {
+            $sample=$data;
+            foreach ($checker as $key_checker => $row_checker) {
+              if(!empty($data->{$key_checker}))
+              {
+
+              }
+              else {
+                $return_data['accept']=0;
+                $return_data['message'].=', field "'.$key_checker.'" not found';
+                $failed++;
+              }
+            }
+          }
+        }
+        //JIKA FORMAT PENULISAN SALAH
+        else
+        {
+          $return_data['accept']=0;
+          $return_data['message'].='API Error, tell to api developer';
+          $failed++;
+        }
+    }
+    return (object)array(
+      'accept'=>$return_data['accept'],
+      'message'=>$return_data['message'],
+      'success'=>$success,
+      'failed'=>$failed
+    );
+  }
+}
+
 if (!function_exists('set_format_api')) {
 
-  function set_format_api($status=false,$checker=null,$data=null,$option=null)
+  function set_format_api($data=null,$option=null)
   {
-      //inisiasi data awal
+      //INISIASI VARIABLE AWAL
       $return_data=array();
-      $accepted_format=true;
       $return_data['message'] = "";
 
-
+      //JIKA TIDAK DIISI PRIMARY MAKA PRIMARY DIKOSONGKAN
       if(empty($option['primary']))
       {
         $option['primary']="";
       }
+
+      //JIKA TIDAK DIISI SUCCESS AWAL
       if(empty($option['success']))
       {
         $option['success']=0;
       }
+
+      //JIKA TIDAK DIISI FAILED AWAL
       if(empty($option['failed']))
       {
         $option['failed']=0;
       }
+
+      //JIKA TIDAK ADA CUSTOM FRONT MESSAGE
       if(empty($option['message_front']))
       {
         $option['message_front']='';
       }
+
+      //JIKA TIDAK ADA CUSTOM BACK MESSAGE
       if(empty($option['message_back']))
       {
         $option['message_back']='';
       }
 
-      //Melakukan pengecheckan di setiap field yang diterima
-      if(count($checker)>0)
+      //JIKA DATA OUT ADA
+      if(!empty(@$data))
       {
-          if(is_array($data) || is_object($data))
-          {
-            if(!is_array($data))
-            {
-                $data=(array)$data;
-            }
-          }
-
-          if(!empty(@$data['in']))
-          {
-            if(is_array($data['in']))
-            {
-              //Jika data input berupa array
-              foreach ($data['in'] as $key => $row) {
-                foreach ($checker as $key_checker => $row_checker) {
-                  if(!empty(@$row->{$key_checker}))
-                  {
-
-                  }
-                  else {
-                    $accepted_format=false;
-                    $return_data['message'].=', field "'.$key_checker.'" not found';
-                    $option['failed']++;
-                  }
-                }
-              }
-            }
-            else
-            {
-              $sample=$data['in'];
-              //Jika data input berupa array
-              foreach ($checker as $key_checker => $row_checker) {
-                if(!empty($data['in']->{$key_checker}))
-                {
-
-                }
-                else {
-                  $accepted_format=false;
-                  $return_data['message'].=', field "'.$key_checker.'" not found';
-                  $option['failed']++;
-                }
-              }
-            }
-          }
-          else
-          {
-            $accepted_format=false;
-            $return_data['message'].='API Error, tell to api developer';
-            $option['failed']++;
-          }
-      }
-
-      if(!empty(@$data['out']))
-      {
-        if(count(@$data['out'])>1)
+        if(@count(@$data)>1 && is_array(@$data))
         {
-          $return_data["data_array"]=$data['out'];
+          $return_data["data"]=$data;
+          $return_data['type']='list';
+          $return_data['count']=count(@$data);
         }
         else
         {
-          $return_data["data"]=$data['out'][0];
+          if(is_array(@$data))
+          {
+            $return_data["data"]=$data[0];
+            $return_data['type']='object';
+            $return_data['count']=1;
+          }
+          else
+          {
+            $return_data["data"]=$data;
+            $return_data['type']='object';
+            $return_data['count']=1;
+          }
         }
       }
       else
@@ -130,22 +162,35 @@ if (!function_exists('set_format_api')) {
          $return_data["data"]="";
       }
 
-      if($accepted_format)
+      //JIKA FORMAT BENAR
+      if(@$option['failed']==0)
       {
           $return_data["status"]="true";
       }
+      //JIKA FORMAT SALAH
       else
       {
           $return_data["status"]="false";
+          $return_data['data']="";
+          $return_data['type']='';
+          $return_data['count']=0;
       }
+      if(empty(@$return_data['type']))
+      {
+        $return_data['type']='';
+        $return_data['count']=0;
+      }
+
+      //RETURN FORMAT DATA
       $return_format_data=array(
         'status'=>$return_data['status'],
         'success'=>$option['success'],
         'failed'=>$option['failed'],
         'message'=>$option['message_front'].$return_data['message'].$option['message_back'],
         'primary_key'=>$option['primary'],
+        'type'=>$return_data['type'],
         'data'=>empty(@$return_data['data'])?"":$return_data['data'],
-        'data_array'=>empty(@$return_data['data_array'])?"":$return_data['data_array']
+        'count'=>$return_data['count']
       );
       $return_format_data=(object)$return_format_data;
 

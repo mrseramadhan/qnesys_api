@@ -22,4 +22,5 @@ Route::get('/user', function (Request $request){
   return 'test';
 });
 
-Route::get('/login', 'Login_Controller@get_token');
+Route::post('/login', 'Login_Controller@get_token');
+Route::post('/User', 'User_Controller@insert');

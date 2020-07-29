@@ -486,7 +486,7 @@ class ComposerStaticInitec9b296263e33beb33687df17570cd93
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\Hotel_Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Hotel_Controller.php',
-        'App\\Http\\Controllers\\Token_Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Token_Controller.php',
+        'App\\Http\\Controllers\\Login_Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Login_Controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',

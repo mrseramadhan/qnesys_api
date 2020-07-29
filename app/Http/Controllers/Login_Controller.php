@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Format_API;
+use App\Ms_User;
 
 class Login_Controller extends Controller
 {
@@ -43,28 +44,16 @@ class Login_Controller extends Controller
         )
       );
 
-      echo set_format_api(
-        true,
-        $checker,
-        $data_format
-      );
-      $success=0;
-      $failed=0;
+      return response(
+        set_format_api(
+          true,
+          $checker,
+          $data_format
+        ), 200)
+        ->header('Content-Type', 'json')
+        ->header('API-Version', get_api_patch())
+      ;
 
-      // "status": true,
-      // "success_count"	: 3,
-   		// "failed_count"	: 0,
-			// "count"	: 3,
-			// "message" : "data was found $count"
-			// "data" : [
-			// 		["id_hotel":1,"nama_hotel":"Susan Hot & el","keterangan":"ugh"],
-			// 		["id_hotel":2,"nama_hotel":"Elan Susanti Hotel","keterangan":"ouch"],
-			// 		["id_hotel":3,"nama_hotel":"Elan Susanti Hotel","keterangan":"ouch"]
-			// 	 ]
-      //
-   		// "message" : "success $success_count & failed $failed_count",
-      // ""
-      // if()
 
     }
 

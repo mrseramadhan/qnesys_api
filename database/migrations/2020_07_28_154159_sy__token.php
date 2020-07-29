@@ -15,10 +15,12 @@ class SyToken extends Migration
     {
         Schema::create('Sy_Token', function (Blueprint $table) {
             $table->string('token',100)->primary();
-            $table->string('user',50);
+            $table->integer('id_user')->unsigned()->nullable(true)->index();
             $table->boolean('active');
             $table->timestamps();
         });
+
+
     }
 
     /**
