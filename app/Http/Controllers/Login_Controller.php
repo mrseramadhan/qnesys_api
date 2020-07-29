@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Format_API;
 use App\Ms_User;
+use App\Sy_Token;
+
 
 class Login_Controller extends Controller
 {
@@ -16,46 +18,78 @@ class Login_Controller extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    function get_token(Request $request)
-    {
-      if(is_json($request->getContent()))
-      {
-        $data=json_decode($request->getContent());
-      }
-      else
-      {
-        $data=$request;
-      }
+     function login(Request $request)
+     {
+       if(is_json($request->getContent()))
+       {
+         $request_body=json_decode($request->getContent());
+       }
+       else
+       {
+         $request_body=$request;
+       }
+       //Untuk melakukan pengecheckan data dan hanya untuk IN
+       $checker=array(
+         'username'=>true,
+         'password'=>true
+       );
 
-      //Untuk melakukan pengecheckan data dan hanya untuk IN
-      $checker=array(
-        'username'=>true,
-        'password'=>true
-      );
+       $check_result=check_input_format($checker,$request_body);
+       $controller_message='';
+       $controller_failed=0;
+       $controller_success=0;
+       if($check_result->accept)
+       {
+         $result_user=Ms_User::where('username',$request_body->username)->get();
+         if($result_user->count()>0)
+         {
+           if(password_verify($request_body->password,$result_user->first()->password))
+           {
+             Sy_Token::where('active', 1)->update(['active' => 0]);
+             $token=Str::random('5').date('d').Str::random('5').date('m').Str::random('5').date('y').Str::random('5').date('H').Str::random('5').date('i').Str::random('5').date('s');
+             $result=Sy_Token::create([
+               'token'=>$token,
+               'id_user'=>@$result_user->first()->id_user,
+               'active'=>1
+             ]);
+             $controller_success++;
+             $data_out=$token;
+             $controller_message='Success to create new token';
+           }
+           else
+           {
+             $controller_failed++;
+             $controller_message='Wrong password';
+           }
+         }
+         else
+         {
+           $controller_failed++;
+           $controller_message='Username not found';
+         }
+       }
+       else
+       {
+           $controller_failed++;
+           $controller_message='Format not accepted';
+       }
 
-      $data_format=array(
-        'in'=>$data,
-        'out'=>array(
-          array(
-            'token'=>Str::random('5').date('d').Str::random('5').date('m').Str::random('5').date('y').Str::random('5').date('H').Str::random('5').date('i').Str::random('5').date('s'),
-            'username'=>'',
-            'id_user'=>'1'
-          )
-        )
-      );
+       return response(
+         set_format_api(
+           @$data_out,
+           array(
+             'primary'=>'token',
+             'success'=>$check_result->success+$controller_success,
+             'failed'=>$check_result->failed+$controller_failed,
+             'message_front'=>$controller_message,
+             'message_back'=>$check_result->message
+           )
+         ), 200)
+         ->header('Content-Type', 'json')
+         ->header('API-Version', get_api_patch())
+       ;
 
-      return response(
-        set_format_api(
-          true,
-          $checker,
-          $data_format
-        ), 200)
-        ->header('Content-Type', 'json')
-        ->header('API-Version', get_api_patch())
-      ;
-
-
-    }
+     }
 
 
 }

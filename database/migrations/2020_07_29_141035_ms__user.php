@@ -16,7 +16,7 @@ class MsUser extends Migration
         Schema::create('Ms_User', function (Blueprint $table) {
           $table->integerIncrements('id_user');
           $table->string('name',100);
-          $table->string('username',50);
+          $table->string('username',50)->unique();
           $table->string('password',100);
           $table->timestamps();
         });

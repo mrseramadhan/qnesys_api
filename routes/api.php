@@ -18,9 +18,43 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/user', function (Request $request){
-  return 'test';
-});
+Route::get('/InvalidHeader', function (Request $request){
+  return response(
+    set_format_api(
+      @$data_out,
+      array(
+        'primary'=>'',
+        'success'=>0,
+        'failed'=>1,
+        'message_front'=>'Invalid header format'
+      )
+    ), 403)
+    ->header('Content-Type', 'json')
+    ->header('API-Version', get_api_patch())
+  ;
+})->name('invalid_header');
 
-Route::post('/login', 'Login_Controller@get_token');
-Route::post('/User', 'User_Controller@insert');
+Route::get('/InvalidToken', function (Request $request){
+  return response(
+    set_format_api(
+      @$data_out,
+      array(
+        'primary'=>'',
+        'success'=>0,
+        'failed'=>1,
+        'message_front'=>'Token missmatch'
+      )
+    ), 403)
+    ->header('Content-Type', 'json')
+    ->header('API-Version', get_api_patch())
+  ;
+})->name('invalid_token');
+
+Route::post('/Login', 'Login_Controller@login');
+Route::get('/User', 'User_Controller@read');
+Route::post('/User', 'User_Controller@create');
+
+Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
+  Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');
+  Route::delete('/User', 'User_Controller@delete')->middleware('\App\Http\Middleware\HandlePutFormData');
+});

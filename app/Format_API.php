@@ -48,7 +48,11 @@ if (!function_exists('check_input_format')) {
             //Jika data input berupa array
             foreach ($data as $key => $row) {
               foreach ($checker as $key_checker => $row_checker) {
-                if(!empty(@$row->{$key_checker}))
+                if(property_exists($row, $key_checker))
+                {
+
+                }
+                else if(!empty(@$data->{$key_checker}))
                 {
 
                 }
@@ -65,7 +69,11 @@ if (!function_exists('check_input_format')) {
           {
             $sample=$data;
             foreach ($checker as $key_checker => $row_checker) {
-              if(!empty($data->{$key_checker}))
+              if(property_exists($data, $key_checker))
+              {
+
+              }
+              else if(!empty(@$data->{$key_checker}))
               {
 
               }
@@ -140,6 +148,7 @@ if (!function_exists('set_format_api')) {
           $return_data["data"]=$data;
           $return_data['type']='list';
           $return_data['count']=count(@$data);
+          $option['message_front'].='Data was found '.count(@$data);
         }
         else
         {
@@ -148,12 +157,21 @@ if (!function_exists('set_format_api')) {
             $return_data["data"]=$data[0];
             $return_data['type']='object';
             $return_data['count']=1;
+            $option['message_front'].=', Data was found 1';
           }
-          else
+          else if(is_object(@$data))
           {
             $return_data["data"]=$data;
             $return_data['type']='object';
             $return_data['count']=1;
+            $option['message_front'].=', Data was found 1';
+          }
+          else
+          {
+            $return_data["data"]=$data;
+            $return_data['type']='string';
+            $return_data['count']=1;
+            $option['message_front'].=', Data was found 1';
           }
         }
       }
