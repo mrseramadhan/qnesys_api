@@ -50,6 +50,8 @@ Route::get('/InvalidToken', function (Request $request){
   ;
 })->name('invalid_token');
 
+
+
 Route::post('/Login', 'Login_Controller@login');
 Route::get('/User', 'User_Controller@read');
 Route::post('/User', 'User_Controller@create');
@@ -61,6 +63,10 @@ Route::delete('/Guest', 'Guest_Controller@delete');
 Route::get('/GuestAccess', 'Check_IO_Access_Controller@read');
 Route::post('/GuestAccess', 'Check_IO_Access_Controller@create');
 Route::delete('/GuestAccess', 'Check_IO_Access_Controller@delete');
+
+Route::get('/Hotel','Hotel_Controller@read');
+Route::post('/Hotel', 'Hotel_Controller@create');
+Route::delete('/Hotel','Hotel_Controller@delete');
 
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');

@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/Websocket', function () {
+    return view('websocket');
+});
+
+Route::get('/fire', function () {
+    event(new \App\Events\MessagePushed());
+    return 'ok';
+});
