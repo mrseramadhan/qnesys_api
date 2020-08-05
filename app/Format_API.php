@@ -154,15 +154,15 @@ if (!function_exists('set_format_api')) {
         {
           if(is_array(@$data))
           {
-            $return_data["data"]=$data[0];
-            $return_data['type']='object';
+            $return_data["data"]=array($data[0]);
+            $return_data['type']='list';
             $return_data['count']=1;
             $option['message_front'].=', Data was found 1';
           }
           else if(is_object(@$data))
           {
-            $return_data["data"]=$data;
-            $return_data['type']='object';
+            $return_data["data"]=array($data);
+            $return_data['type']='list';
             $return_data['count']=1;
             $option['message_front'].=', Data was found 1';
           }

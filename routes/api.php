@@ -54,6 +54,14 @@ Route::post('/Login', 'Login_Controller@login');
 Route::get('/User', 'User_Controller@read');
 Route::post('/User', 'User_Controller@create');
 
+Route::get('/Guest', 'Guest_Controller@read');
+Route::post('/Guest', 'Guest_Controller@create');
+Route::delete('/Guest', 'Guest_Controller@delete');
+
+Route::get('/GuestAccess', 'Check_IO_Access_Controller@read');
+Route::post('/GuestAccess', 'Check_IO_Access_Controller@create');
+Route::delete('/GuestAccess', 'Check_IO_Access_Controller@delete');
+
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');
   Route::delete('/User', 'User_Controller@delete')->middleware('\App\Http\Middleware\HandlePutFormData');
