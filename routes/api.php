@@ -68,6 +68,34 @@ Route::get('/Hotel','Hotel_Controller@read');
 Route::post('/Hotel', 'Hotel_Controller@create');
 Route::delete('/Hotel','Hotel_Controller@delete');
 
+Route::get('/Around','Around_Controller@read');
+Route::post('/Around', 'Around_Controller@create');
+Route::delete('/Around','Around_Controller@delete');
+
+Route::get('/Event','Event_Controller@read');
+Route::post('/Event', 'Event_Controller@create');
+Route::delete('/Event','Event_Controller@delete');
+
+Route::get('/Category_Galery','Category_Galery_Controller@read');
+Route::post('/Category_Galery', 'Category_Galery_Controller@create');
+Route::delete('/Category_Galery','Category_Galery_Controller@delete');
+
+Route::get('/Galery','Galery_Controller@read');
+Route::post('/Galery', 'Galery_Controller@create');
+Route::delete('/Galery','Galery_Controller@delete');
+
+Route::get('/Information','Information_Controller@read');
+Route::post('/Information', 'Information_Controller@create');
+Route::delete('/Information','Information_Controller@delete');
+
+Route::get('/Facilities_Category','Facilities_Category_Controller@read');
+Route::post('/Facilities_Category', 'Facilities_Category_Controller@create');
+Route::delete('/Facilities_Category','Facilities_Category_Controller@delete');
+
+Route::get('/Facilities','Hotel_Facilities_Controller@read');
+Route::post('/Facilities', 'Hotel_Facilities_Controller@create');
+Route::delete('/Facilities','Hotel_Facilities_Controller@delete');
+
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');
   Route::delete('/User', 'User_Controller@delete')->middleware('\App\Http\Middleware\HandlePutFormData');
