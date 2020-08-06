@@ -64,9 +64,25 @@ Route::get('/GuestAccess', 'Check_IO_Access_Controller@read');
 Route::post('/GuestAccess', 'Check_IO_Access_Controller@create');
 Route::delete('/GuestAccess', 'Check_IO_Access_Controller@delete');
 
+Route::get('/Room', 'Room_Controller@read');
+Route::post('/Room', 'Room_Controller@create');
+Route::delete('/Room', 'Room_Controller@delete');
+
+Route::get('/RoomCategory', 'Room_Category_Controller@read');
+Route::post('/RoomCategory', 'Room_Category_Controller@create');
+Route::delete('/RoomCategory', 'Room_Category_Controller@delete');
+
+Route::get('/RoomHardware', 'Room_Hardware_Controller@read');
+Route::post('/RoomHardware', 'Room_Hardware_Controller@create');
+Route::delete('/RoomHardware', 'Room_Hardware_Controller@delete');
+
 Route::get('/Hotel','Hotel_Controller@read');
 Route::post('/Hotel', 'Hotel_Controller@create');
 Route::delete('/Hotel','Hotel_Controller@delete');
+
+Route::get('/HotelFacilities','Hotel_Facilities_Controller@read');
+Route::post('/HotelFacilities','Hotel_Facilities_Controller@create');
+Route::delete('/HotelFacilities','Hotel_Facilities_Controller@delete');
 
 Route::get('/Around','Around_Controller@read');
 Route::post('/Around', 'Around_Controller@create');
@@ -88,9 +104,9 @@ Route::get('/Information','Information_Controller@read');
 Route::post('/Information', 'Information_Controller@create');
 Route::delete('/Information','Information_Controller@delete');
 
-Route::get('/Facilities_Category','Facilities_Category_Controller@read');
-Route::post('/Facilities_Category', 'Facilities_Category_Controller@create');
-Route::delete('/Facilities_Category','Facilities_Category_Controller@delete');
+Route::get('/FacilitiesCategory','Facilities_Category_Controller@read');
+Route::post('/FacilitiesCategory', 'Facilities_Category_Controller@create');
+Route::delete('/FacilitiesCategory','Facilities_Category_Controller@delete');
 
 Route::get('/Facilities','Hotel_Facilities_Controller@read');
 Route::post('/Facilities', 'Hotel_Facilities_Controller@create');

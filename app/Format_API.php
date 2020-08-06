@@ -145,6 +145,11 @@ if (!function_exists('set_format_api')) {
       {
         if(@count(@$data)>1 && is_array(@$data))
         {
+          array_walk_recursive($data, function(&$item)
+            {
+              $item=strval($item);
+            }
+          );
           $return_data["data"]=$data;
           $return_data['type']='list';
           $return_data['count']=count(@$data);
@@ -152,6 +157,11 @@ if (!function_exists('set_format_api')) {
         }
         else
         {
+          array_walk_recursive($data, function(&$item)
+            {
+              $item=strval($item);
+            }
+          );
           if(is_array(@$data))
           {
             $return_data["data"]=array($data[0]);
@@ -207,8 +217,9 @@ if (!function_exists('set_format_api')) {
         'message'=>$option['message_front'].$return_data['message'].$option['message_back'],
         'primary_key'=>$option['primary'],
         'type'=>$return_data['type'],
+        'count'=>$return_data['count'],
         'data'=>empty(@$return_data['data'])?"":$return_data['data'],
-        'count'=>$return_data['count']
+
       );
       $return_format_data=(object)$return_format_data;
 

@@ -268,21 +268,29 @@ class Guest_Controller extends Controller
           $request_body->guest_name='Guest_'.date('dmYHis');
         }
 
-        $result=Ms_Guest::create([
-          'nik'=>@$request_body->nik,
-          'guest_name'=>@$request_body->guest_name,
-          'address'=>@$request_body->address,
-          'pos_code'=>@$request_body->pos_code,
-          'code_provinsi'=>@$request_body->code_provinsi,
-          'code_kabupaten'=>@$request_body->code_kabupaten,
-          'code_kelurahan'=>@$request_body->code_kelurahan,
-          'phone'=>@$request_body->phone,
-          'email'=>@$request_body->email,
-          'gender'=>@$request_body->gender,
-          'birthdate'=>@$request_body->birthdate,
-          'photo'=>@$file_photo,
-          'scan_ktp'=>@$file_scan_ktp,
-        ]);
+        try{
+          $result=Ms_Guest::create([
+            'nik'=>@$request_body->nik,
+            'guest_name'=>@$request_body->guest_name,
+            'address'=>@$request_body->address,
+            'pos_code'=>@$request_body->pos_code,
+            'code_provinsi'=>@$request_body->code_provinsi,
+            'code_kabupaten'=>@$request_body->code_kabupaten,
+            'code_kelurahan'=>@$request_body->code_kelurahan,
+            'phone'=>@$request_body->phone,
+            'email'=>@$request_body->email,
+            'gender'=>@$request_body->gender,
+            'birthdate'=>@$request_body->birthdate,
+            'photo'=>@$file_photo,
+            'scan_ktp'=>@$file_scan_ktp,
+          ]);
+        }
+        catch(\Illuminate\Database\QueryException $e)
+        {
+          $controller_message.=''.$e->getMessage();
+          $controller_failed++;
+        }
+
         if(!empty($result->id_guest))
         {
           $data_out=(object)
@@ -295,7 +303,7 @@ class Guest_Controller extends Controller
         else
         {
           $controller_failed++;
-          $controller_message='Failed to create new guest';
+          $controller_message.=', Failed to create new guest';
         }
       }
       else
@@ -356,18 +364,27 @@ class Guest_Controller extends Controller
           {
             File::delete($path.'/'.$data_update->photo);
             $pic_photo = $request->file('photo');
-            $pic_photo->move($path,$pic_photo->getClientOriginalName());
-            $data_update->photo = $pic_photo->getClientOriginalName();
+            $pic_photo->move($path,'GUESTPHOTO'.date('ymdhisu').'.'.$pic_photo->getClientOriginalExtension());
+            $data_update->photo = 'GUESTPHOTO'.date('ymdhisu').'.'.$pic_photo->getClientOriginalExtension();
           }
           if(!empty($request_body->scan_ktp))
           {
             File::delete($path.'/'.$data_update->scan_ktp);
             $pic_scan_ktp = $request->file('scan_ktp');
-            $pic_scan_ktp->move($path,$pic_scan_ktp->getClientOriginalName());
-            $data_update->scan_ktp = $pic_scan_ktp->getClientOriginalName();
+            $pic_scan_ktp->move($path,'KTP'.date('ymdhisu').'.'.$pic_scan_ktp->getClientOriginalExtension());
+            $data_update->scan_ktp = 'KTP'.date('ymdhisu').'.'.$pic_scan_ktp->getClientOriginalExtension();
           }
-          $execute = $data_update->save();
-          if($execute)
+
+          try{
+            $execute = $data_update->save();
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
+
+          if(@$execute)
           {
             $data_out=(object)
               array(
@@ -379,7 +396,7 @@ class Guest_Controller extends Controller
           else
           {
             $controller_failed++;
-            $controller_message='Failed to update guest data';
+            $controller_message.=', Failed to update guest data';
           }
         }
         else

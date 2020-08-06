@@ -251,11 +251,18 @@ class Check_IO_Access_Controller extends Controller
         if(empty(@$request_body->id_check_io_access))
         {
 
-          $result=Dt_Check_IO_Access::create([
-            'id_check_io'=>@$request_body->id_check_io,
-            'id_guest'=>@$request_body->id_guest,
-            'active'=>'1'
-          ]);
+          try{
+            $result=Dt_Check_IO_Access::create([
+              'id_check_io'=>@$request_body->id_check_io,
+              'id_guest'=>@$request_body->id_guest,
+              'active'=>'1'
+            ]);
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
 
           if(!empty($result->id_check_io_access))
           {
@@ -269,7 +276,7 @@ class Check_IO_Access_Controller extends Controller
           else
           {
             $controller_failed++;
-            $controller_message='Failed to create new room access';
+            $controller_message.=', Failed to create new room access';
           }
         }
         else
@@ -289,7 +296,17 @@ class Check_IO_Access_Controller extends Controller
             {
               $data_update->active = $request_body->active;
             }
-            $execute = $data_update->save();
+
+            try{
+              $execute = $data_update->save();
+            }
+            catch(\Illuminate\Database\QueryException $e)
+            {
+              $controller_message.=''.$e->getMessage();
+              $controller_failed++;
+            }
+
+
             if($execute)
             {
               $data_out=(object)
@@ -302,7 +319,7 @@ class Check_IO_Access_Controller extends Controller
             else
             {
               $controller_failed++;
-              $controller_message='Failed to update room access';
+              $controller_message.=', Failed to update room access';
             }
           }
           else
