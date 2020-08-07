@@ -250,39 +250,59 @@ class Facilities_Category_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $picture->move($path,$picture->getClientOriginalName());
+        $move_picture = 'Facilities_Category'.$picture->getClientOriginalName();
+        $picture->move($path,$move_picture);
 
         if($request_body->id_facilities_category == null){
+          try{
             $result=Ms_Facilities_Category::create([
-                'id_hotel'                           => $request_body->id_hotel,
-                'category_facilities_name'           => $request_body->category_facilities_name,
-                'picture'                            => $picture->getClientOriginalName()
-              ]);
+              'id_hotel'                           => $request_body->id_hotel,
+              'category_facilities_name'           => $request_body->category_facilities_name,
+              'picture'                            => $move_picture
+            ]);
 
-              if($result->id_facilities_category)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_facilities_category'=>$result->id_facilities_category
-                  );
-                  $controller_success++;
-                  $controller_message='Success to create new facilities category';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to create new facilities category';
-              }
+            if($result->id_facilities_category)
+            {
+                $data_out=(object)
+                  array(
+                  'id_facilities_category'=>$result->id_facilities_category
+                );
+                $controller_success++;
+                $controller_message='Success to create new facilities category';
+            }
+            else
+            {
+                $controller_failed++;
+                $controller_message='Failed to create new facilities category';
+            }
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
         }else{
             $result=Ms_Facilities_Category::where('id_facilities_category','=',$request_body->id_facilities_category)
                 ->update([
                     'id_hotel'                           => $request_body->id_hotel,
                     'category_facilities_name'           => $request_body->category_facilities_name,
-                    'picture'                            => $picture->getClientOriginalName()
+                    'picture'                            => $move_picture
               ]);
-
-            $controller_success++;
-            $controller_message='Success to update facilities category';
+ 
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_facilities_category'=>$request_body->id_facilities_category
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update facilities category';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update facilities category';
+              }
         }
       }
       else
@@ -328,24 +348,33 @@ class Facilities_Category_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        if(Ms_Facilities_Category::whereIn('id_facilities_category',$request_body->id_facilities_category)->delete())
-        {
-          $data_out=$request_body->id_facilities_category;
-          if(is_array($request_body->id_facilities_category))
+        $data_facilities_category = Ms_Facilities_Category::select('picture')->where('id_facilities_category', $request_body->id_facilities_category)->first();
+        $filepath = 'assets/img/';
+        $picture = $filepath.$data_facilities_category->picture;
+        @unlink($picture);
+
+        if(!is_array($request_body->id_facilities_category))
+      	{
+        	$request_body->id_facilities_category=array($request_body->id_facilities_category);
+          if(Ms_Facilities_Category::whereIn('id_facilities_category',$request_body->id_facilities_category)->delete())
           {
-            $controller_success+=count($request_body->id_facilities_category);
+            $data_out=$request_body->id_facilities_category;
+            if(is_array($request_body->id_facilities_category))
+            {
+              $controller_success+=count($request_body->id_facilities_category);
+            }
+            else
+            {
+              $controller_success++;
+            }
+
+            $controller_message='Success to delete facilities category';
           }
           else
           {
-            $controller_success++;
+            $controller_failed++;
+            $controller_message='Data not found';
           }
-
-          $controller_message='Success to delete facilities category';
-        }
-        else
-        {
-          $controller_failed++;
-          $controller_message='Data not found';
         }
       }
       else

@@ -251,28 +251,35 @@ class Event_Controller extends Controller
       if($check_result->accept)
       {
         if($request_body->id_event == null){
+          try{
             $result=Ms_Event::create([
-                'id_hotel'          => $request_body->id_hotel,
-                'event_name'        => $request_body->event_name,
-                'description'       => $request_body->description,
-                'start_at'          => $request_body->start_at,
-                'end_at'            => $request_body->end_at,
-              ]);
+              'id_hotel'          => $request_body->id_hotel,
+              'event_name'        => $request_body->event_name,
+              'description'       => $request_body->description,
+              'start_at'          => $request_body->start_at,
+              'end_at'            => $request_body->end_at,
+            ]);
 
-              if($result->id_event)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_event'=>$result->id_event
-                  );
-                  $controller_success++;
-                  $controller_message='Success to create new event hotel';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to create new event hotel';
-              }
+            if($result->id_event)
+            {
+                $data_out=(object)
+                  array(
+                  'id_event'=>$result->id_event
+                );
+                $controller_success++;
+                $controller_message='Success to create new event hotel';
+            }
+            else
+            {
+                $controller_failed++;
+                $controller_message='Failed to create new event hotel';
+            }
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
         }else{
             $result=Ms_Event::where('id_event','=',$request_body->id_event)
                 ->update([
@@ -283,8 +290,20 @@ class Event_Controller extends Controller
                     'end_at'            => $request_body->end_at,
               ]);
 
-            $controller_success++;
-            $controller_message='Success to update event hotel';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_event'=>$request_body->id_event
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update event hotel';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update event hotel';
+              }
         }
       }
       else

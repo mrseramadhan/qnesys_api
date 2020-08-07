@@ -250,13 +250,14 @@ class Information_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $picture->move($path,$picture->getClientOriginalName());
+        $move_picture = 'Information_'.$picture->getClientOriginalName();
+        $picture->move($path,$move_picture);
 
         if($request_body->id_information == null){
             $result=Ms_Information::create([
                 'id_hotel'              => $request_body->id_hotel,
                 'description'           => $request_body->description,
-                'picture'               => $picture->getClientOriginalName()
+                'picture'               => $move_picture
               ]);
 
               if($result->id_information)
@@ -278,11 +279,23 @@ class Information_Controller extends Controller
                 ->update([
                     'id_hotel'              => $request_body->id_hotel,
                     'description'           => $request_body->description,
-                    'picture'               => $picture->getClientOriginalName()
+                    'picture'               => $move_picture
               ]);
 
-            $controller_success++;
-            $controller_message='Success to update information hotel';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_information'=>$request_body->id_information
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update information hotel';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update information hotel';
+              }
         }
       }
       else
@@ -328,25 +341,35 @@ class Information_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        if(Ms_Information::whereIn('id_information',$request_body->id_information)->delete())
-        {
-          $data_out=$request_body->id_information;
-          if(is_array($request_body->id_information))
+
+        $data_information = Ms_Information::select('picture')->where('id_information', $request_body->id_information)->first();
+        $filepath = 'assets/img/';
+        $picture = $filepath.$data_information->picture;
+        @unlink($picture);
+        
+        if(!is_array($request_body->id_information))
+      	{
+        	$request_body->id_information=array($request_body->id_information);
+          if(Ms_Information::whereIn('id_information',$request_body->id_information)->delete())
           {
-            $controller_success+=count($request_body->id_information);
+            $data_out=$request_body->id_information;
+            if(is_array($request_body->id_information))
+            {
+              $controller_success+=count($request_body->id_information);
+            }
+            else
+            {
+              $controller_success++;
+            }
+
+            $controller_message='Success to delete information hotel';
           }
           else
           {
-            $controller_success++;
+            $controller_failed++;
+            $controller_message='Data not found';
           }
-
-          $controller_message='Success to delete information hotel';
-        }
-        else
-        {
-          $controller_failed++;
-          $controller_message='Data not found';
-        }
+      	}
       }
       else
       {

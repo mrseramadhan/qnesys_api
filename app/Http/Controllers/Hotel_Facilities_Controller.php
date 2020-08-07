@@ -250,15 +250,16 @@ class Hotel_Facilities_Controller extends Controller
       if($check_result->accept)
       {
         $picture = $request->file('picture');
+        $move_picture = 'Hotel_Facilitites_'.$picture->getClientOriginalName();
         $path = 'assets/img';
-        $picture->move($path,$picture->getClientOriginalName());
+        $picture->move($path,$move_picture);
 
         if($request_body->id_facilities == null){
             $result=Ms_Hotel_Facilities::create([
                 'id_facilities_category'    => $request_body->id_facilities_category,
                 'facilities_name'           => $request_body->facilities_name,
                 'description'               => $request_body->description,
-                'picture'                   => $picture->getClientOriginalName()
+                'picture'                   => $move_picture
               ]);
 
               if($result->id_facilities)
@@ -281,11 +282,23 @@ class Hotel_Facilities_Controller extends Controller
                     'id_facilities_category'    => $request_body->id_facilities_category,
                     'facilities_name'           => $request_body->facilities_name,
                     'description'               => $request_body->description,
-                    'picture'                   => $picture->getClientOriginalName()
+                    'picture'                   => $move_picture
               ]);
 
-            $controller_success++;
-            $controller_message='Success to update facilities';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_facilities'=>$request_body->id_facilities
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update facilities';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update facilities';
+              }
         }
       }
       else
@@ -331,24 +344,34 @@ class Hotel_Facilities_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        if(Ms_Hotel_Facilities::whereIn('id_facilities',$request_body->id_facilities)->delete())
-        {
-          $data_out=$request_body->id_facilities;
-          if(is_array($request_body->id_facilities))
+
+        $data_facilities = Ms_Hotel_Facilities::select('picture')->where('id_facilities', $request_body->id_facilities)->first();
+        $filepath = 'assets/img/';
+        $picture = $filepath.$data_facilities->picture;
+        @unlink($picture);
+
+        if(!is_array($request_body->id_facilities))
+      	{
+        	$request_body->id_facilities=array($request_body->id_facilities);
+          if(Ms_Hotel_Facilities::whereIn('id_facilities',$request_body->id_facilities)->delete())
           {
-            $controller_success+=count($request_body->id_facilities);
+            $data_out=$request_body->id_facilities;
+            if(is_array($request_body->id_facilities))
+            {
+              $controller_success+=count($request_body->id_facilities);
+            }
+            else
+            {
+              $controller_success++;
+            }
+
+            $controller_message='Success to delete facilities';
           }
           else
           {
-            $controller_success++;
+            $controller_failed++;
+            $controller_message='Data not found';
           }
-
-          $controller_message='Success to delete facilities';
-        }
-        else
-        {
-          $controller_failed++;
-          $controller_message='Data not found';
         }
       }
       else
