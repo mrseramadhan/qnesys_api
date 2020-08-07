@@ -401,13 +401,18 @@ class Hotel_Controller extends Controller
       { 
 
         $data_hotel = Ms_Hotel::select('pict_map','logo_hotel','wallpaper')->where('id_hotel', $request_body->id_hotel)->first();
-        $filepath = 'assets/img/';
-        $pict_map = $filepath.$data_hotel->pict_map;
-        $logo_hotel = $filepath.$data_hotel->logo_hotel;
-        $wallpaper = $filepath.$data_hotel->wallpaper;
-        @unlink($pict_map);
-        @unlink($wallpaper);
-        @unlink($logo_hotel);
+        if($data_hotel){
+          $filepath = 'assets/img/';
+          $pict_map = $filepath.$data_hotel->pict_map;
+          $logo_hotel = $filepath.$data_hotel->logo_hotel;
+          $wallpaper = $filepath.$data_hotel->wallpaper;
+          @unlink($pict_map);
+          @unlink($wallpaper);
+          @unlink($logo_hotel);
+        }else{
+          $controller_failed++;
+          $controller_message='Data not found';
+        }
 
         if(!is_array($request_body->id_hotel))
       	{

@@ -346,9 +346,14 @@ class Hotel_Facilities_Controller extends Controller
       {
 
         $data_facilities = Ms_Hotel_Facilities::select('picture')->where('id_facilities', $request_body->id_facilities)->first();
-        $filepath = 'assets/img/';
-        $picture = $filepath.$data_facilities->picture;
-        @unlink($picture);
+        if($data_facilities){
+          $filepath = 'assets/img/';
+          $picture = $filepath.$data_facilities->picture;
+          @unlink($picture);
+        }else{
+          $controller_failed++;
+          $controller_message='Data not found';
+        }
 
         if(!is_array($request_body->id_facilities))
       	{

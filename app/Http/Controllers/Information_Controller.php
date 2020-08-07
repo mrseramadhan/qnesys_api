@@ -254,26 +254,33 @@ class Information_Controller extends Controller
         $picture->move($path,$move_picture);
 
         if($request_body->id_information == null){
+          try{
             $result=Ms_Information::create([
-                'id_hotel'              => $request_body->id_hotel,
-                'description'           => $request_body->description,
-                'picture'               => $move_picture
-              ]);
+              'id_hotel'              => $request_body->id_hotel,
+              'description'           => $request_body->description,
+              'picture'               => $move_picture
+            ]);
 
-              if($result->id_information)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_information'=>$result->id_information
-                  );
-                  $controller_success++;
-                  $controller_message='Success to create new information hotel';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to create new information hotel';
-              }
+            if($result->id_information)
+            {
+                $data_out=(object)
+                  array(
+                  'id_information'=>$result->id_information
+                );
+                $controller_success++;
+                $controller_message='Success to create new information hotel';
+            }
+            else
+            {
+                $controller_failed++;
+                $controller_message='Failed to create new information hotel';
+            }
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
         }else{
             $result=Ms_Information::where('id_information','=',$request_body->id_information)
                 ->update([
@@ -343,9 +350,14 @@ class Information_Controller extends Controller
       {
 
         $data_information = Ms_Information::select('picture')->where('id_information', $request_body->id_information)->first();
-        $filepath = 'assets/img/';
-        $picture = $filepath.$data_information->picture;
-        @unlink($picture);
+        if($data_information){
+          $filepath = 'assets/img/';
+          $picture = $filepath.$data_information->picture;
+          @unlink($picture);
+        }else{
+            $controller_failed++;
+            $controller_message='Data not found';
+        }
         
         if(!is_array($request_body->id_information))
       	{

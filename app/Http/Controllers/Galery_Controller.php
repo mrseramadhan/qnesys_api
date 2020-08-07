@@ -348,6 +348,20 @@ class Galery_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
+        $data_galery = Ms_Galery::select('picture')->where('id_galery', $request_body->id_galery)->first();
+        if($data_hotel){
+          $filepath = 'assets/img/';
+          $picture = $filepath.$data_galery->picture;
+          @unlink($picture);
+        }else{
+          $controller_failed++;
+          $controller_message='Data not found';
+        }
+
+        if(!is_array($request_body->id_galery))
+      	{
+          $request_body->id_galery=array($request_body->id_galery);
+        }
         if(Ms_Galery::whereIn('id_galery',$request_body->id_galery)->delete())
         {
           $data_out=$request_body->id_galery;

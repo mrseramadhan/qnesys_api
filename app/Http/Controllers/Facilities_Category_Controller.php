@@ -349,9 +349,14 @@ class Facilities_Category_Controller extends Controller
       if($check_result->accept)
       {
         $data_facilities_category = Ms_Facilities_Category::select('picture')->where('id_facilities_category', $request_body->id_facilities_category)->first();
-        $filepath = 'assets/img/';
-        $picture = $filepath.$data_facilities_category->picture;
-        @unlink($picture);
+        if($data_facilities_category){
+          $filepath = 'assets/img/';
+          $picture = $filepath.$data_facilities_category->picture;
+          @unlink($picture);
+        }else{
+          $controller_failed++;
+          $controller_message='Data not found';
+        }
 
         if(!is_array($request_body->id_facilities_category))
       	{
