@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use app\Format_API;
@@ -273,17 +274,21 @@ class Hotel_Controller extends Controller
       $controller_failed=0;
       $controller_success=0;
 
-      $pic_map = $request->file('pict_map');
-      $pic_logo_hotel = $request->file('logo_hotel');
-      $pic_wallpaper = $request->file('wallpaper');
-      $path = 'assets/img';
-
-      $pic_map->move($path,$pic_map->getClientOriginalName());
-      $pic_logo_hotel->move($path,$pic_logo_hotel->getClientOriginalName());
-      $pic_wallpaper->move($path,$pic_wallpaper->getClientOriginalName());
-
       if($check_result->accept)
       {
+        $pic_map = $request->file('pict_map');
+        $pic_logo_hotel = $request->file('logo_hotel');
+        $pic_wallpaper = $request->file('wallpaper');
+        $path = 'assets/img';
+  
+        $move_pic_map = 'Hotel_'.$pic_map->getClientOriginalName();
+        $move_pic_logo_hotel = 'Hotel_'.$pic_logo_hotel->getClientOriginalName();
+        $move_pic_wallpaper = 'Hotel_'.$pic_wallpaper->getClientOriginalName();
+
+        $pic_map->move($path,$move_pic_map);
+        $pic_logo_hotel->move($path,$move_pic_logo_hotel);
+        $pic_wallpaper->move($path,$move_pic_wallpaper);
+
         if($request_body->id_hotel == null){
             $result=Ms_Hotel::create([
                 'id_corporation'      => $request_body->id_corporation,
@@ -297,9 +302,9 @@ class Hotel_Controller extends Controller
                 'npwp'                => $request_body->npwp,
                 'pkp_npkp'            => $request_body->pkp_npkp,
                 'map_coordinate'      => $request_body->map_coordinate,
-                'pict_map'            => $pic_map->getClientOriginalName(),
-                'logo_hotel'          => $pic_logo_hotel->getClientOriginalName(),
-                'wallpaper'           => $pic_wallpaper->getClientOriginalName(),
+                'pict_map'            => $move_pic_map,
+                'logo_hotel'          => $move_pic_logo_hotel,
+                'wallpaper'           => $move_pic_wallpaper,
               ]);
 
               if($result->id_hotel)
@@ -335,8 +340,20 @@ class Hotel_Controller extends Controller
                 'wallpaper'           => $pic_wallpaper->getClientOriginalName(),
               ]);
 
-            $controller_success++;
-            $controller_message='Success to update hotel';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_hotel'=>$request_body->id_hotel
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update hotel';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update hotel';
+              }
         }
       }
       else
@@ -381,26 +398,40 @@ class Hotel_Controller extends Controller
       $controller_failed=0;
       $controller_success=0;
       if($check_result->accept)
-      {
-        if(Ms_Hotel::whereIn('id_hotel',$request_body->id_hotel)->delete())
-        {
-          $data_out=$request_body->id_hotel;
-          if(is_array($request_body->id_hotel))
+      { 
+
+        $data_hotel = Ms_Hotel::select('pict_map','logo_hotel','wallpaper')->where('id_hotel', $request_body->id_hotel)->first();
+        $filepath = 'assets/img/';
+        $pict_map = $filepath.$data_hotel->pict_map;
+        $logo_hotel = $filepath.$data_hotel->logo_hotel;
+        $wallpaper = $filepath.$data_hotel->wallpaper;
+        @unlink($pict_map);
+        @unlink($wallpaper);
+        @unlink($logo_hotel);
+
+        if(!is_array($request_body->id_hotel))
+      	{
+        	$request_body->id_hotel=array($request_body->id_hotel);
+          if(Ms_Hotel::whereIn('id_hotel',$request_body->id_hotel)->delete())
           {
-            $controller_success+=count($request_body->id_hotel);
+            $data_out=$request_body->id_hotel;
+            if(is_array($request_body->id_hotel))
+            {
+              $controller_success+=count($request_body->id_hotel);
+            }
+            else
+            {
+              $controller_success++;
+            }
+
+            $controller_message='Success to delete hotel';
           }
           else
           {
-            $controller_success++;
+            $controller_failed++;
+            $controller_message='Data not found';
           }
-
-          $controller_message='Success to delete hotel';
-        }
-        else
-        {
-          $controller_failed++;
-          $controller_message='Data not found';
-        }
+      	}
       }
       else
       {
