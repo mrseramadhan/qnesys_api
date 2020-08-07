@@ -112,6 +112,10 @@ Route::get('/Facilities','Hotel_Facilities_Controller@read');
 Route::post('/Facilities', 'Hotel_Facilities_Controller@create');
 Route::delete('/Facilities','Hotel_Facilities_Controller@delete');
 
+Route::get('/Ssid','Ssid_Hotel_Controller@read');
+Route::post('/Ssid', 'Ssid_Hotel_Controller@create');
+Route::delete('/Ssid','Ssid_Hotel_Controller@delete');
+
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');
   Route::delete('/User', 'User_Controller@delete')->middleware('\App\Http\Middleware\HandlePutFormData');
