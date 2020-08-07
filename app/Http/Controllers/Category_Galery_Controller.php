@@ -271,8 +271,20 @@ class Category_Galery_Controller extends Controller
                     'category_galery_name'  => $request_body->category_galery_name,
               ]);
 
-            $controller_success++;
-            $controller_message='Success to update category galery';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_category_galery'=>$request_body->id_category_galery
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update category galery';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update category galery';
+              }
         }
       }
       else

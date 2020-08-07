@@ -250,39 +250,59 @@ class Galery_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $picture->move($path,$picture->getClientOriginalName());
+        $move_picture = 'Galery_'.$picture->getClientOriginalName();
+        $picture->move($path,$move_picture);
 
         if($request_body->id_galery == null){
+          try{
             $result=Ms_Galery::create([
-                'id_category_galery'    => $request_body->id_category_galery,
-                'id_hotel'              => $request_body->id_hotel,
-                'picture'               => $picture->getClientOriginalName()
-              ]);
+              'id_category_galery'    => $request_body->id_category_galery,
+              'id_hotel'              => $request_body->id_hotel,
+              'picture'               => $move_picture
+            ]);
 
-              if($result->id_galery)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_galery'=>$result->id_galery
-                  );
-                  $controller_success++;
-                  $controller_message='Success to create new galery';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to create new galery';
-              }
+            if($result->id_galery)
+            {
+                $data_out=(object)
+                  array(
+                  'id_galery'=>$result->id_galery
+                );
+                $controller_success++;
+                $controller_message='Success to create new galery';
+            }
+            else
+            {
+                $controller_failed++;
+                $controller_message='Failed to create new galery';
+            }
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
         }else{
             $result=Ms_Galery::where('id_galery','=',$request_body->id_galery)
                 ->update([
                     'id_category_galery'    => $request_body->id_category_galery,
                     'id_hotel'              => $request_body->id_hotel,
-                    'picture'               => $picture->getClientOriginalName()
+                    'picture'               => $move_picture
               ]);
 
-            $controller_success++;
-            $controller_message='Success to update galery';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_galery'=>$request_body->id_galery
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update galery';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update galery';
+              }
         }
       }
       else
