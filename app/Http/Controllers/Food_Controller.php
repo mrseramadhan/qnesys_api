@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Format_API;
-use App\Dt_Room_Hardware;
+use App\Ms_Food;
+use Exception;
+use File;
 
-class Room_Hardware_Controller extends Controller
+class Food_Controller extends Controller
 {
   function read(Request $request)
   {
@@ -38,7 +40,7 @@ class Room_Hardware_Controller extends Controller
     if($check_result->accept)
     {
         $select=explode(',',str_replace(" ","",$request_body->select));
-        $query=Dt_Room_Hardware::select($select);
+        $query=Ms_Food::select($select);
 
         if(empty($request_body->custom_condition)){
             if(is_array($request_body->where))
@@ -185,11 +187,11 @@ class Room_Hardware_Controller extends Controller
           try{
             if(!empty($request_body->select))
             {
-              $data_out=DB::select('SELECT '.$request_body->select.' from dt_room_hardware WHERE '.$request_body->custom_condition);
+              $data_out=DB::select('SELECT '.$request_body->select.' from ms_food WHERE '.$request_body->custom_condition);
             }
             else
             {
-              $data_out=DB::select('SELECT * from dt_room_hardware WHERE '.$request_body->custom_condition);
+              $data_out=DB::select('SELECT * from ms_food WHERE '.$request_body->custom_condition);
             }
             $controller_success++;
           }
@@ -210,7 +212,7 @@ class Room_Hardware_Controller extends Controller
       set_format_api(
         @$data_out,
         array(
-          'primary'=>'id_room_hardware',
+          'primary'=>'id_food',
           'success'=>$check_result->success+$controller_success,
           'failed'=>$check_result->failed+$controller_failed,
           'message_front'=>$controller_message,
@@ -235,16 +237,13 @@ class Room_Hardware_Controller extends Controller
     }
     //Untuk melakukan pengecheckan data dan hanya untuk IN
     $checker=array(
-      'id_room'=>true,
-      'jenis_hardware'=>true,
-      'nama_hardware'=>true,
-      //'koneksi'=>true,
-      //'bluetooh_mac_address'=>true,
-      //'topic_mqtt'=>true,
-      //'mqtt_username'=>true,
-      //'mqtt_password'=>true,
-      //'ip_address'=>true,
-      //'status'=>true
+      'id_food_category'=>true,
+      'food_name'=>true,
+      'chef_name'=>true,
+      'description'=>true,
+      'price'=>true,
+      'qty'=>true,
+      'picture'=>true,
     );
 
     $check_result=check_input_format($checker,$request_body);
@@ -253,26 +252,27 @@ class Room_Hardware_Controller extends Controller
     $controller_success=0;
     if($check_result->accept)
     {
-      if(empty(@$request_body->id_room_hardware))
+      if(empty(@$request_body->id_food))
       {
-        if(empty(@$request_body->status))
+        $pic_picture = $request->file('picture');
+        $file_picture='';
+        $path = 'assets/img';
+
+        if(!empty($request_body->picture))
         {
-          @$request_body->status=0;
+          $pic_picture->move($path,'FOOD_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension());
+          $file_picture='FOOD_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension();
         }
 
         try{
-          $result=Dt_Room_Hardware::create([
-            'id_room_hardware'=>@$request_body->id_room_hardware,
-            'id_room'=>@$request_body->id_room,
-            'jenis_hardware'=>@$request_body->jenis_hardware,
-            'nama_hardware'=>@$request_body->nama_hardware,
-            'koneksi'=>@$request_body->koneksi,
-            'bluetooth_mac_address'=>@$request_body->bluetooth_mac_address,
-            'topic_mqtt'=>@$request_body->topic_mqtt,
-            'mqtt_username'=>@$request_body->mqtt_username,
-            'mqtt_password'=>@$request_body->mqtt_password,
-            'ip_address'=>@$request_body->ip_address,
-            'status'=>@$request_body->status
+          $result=Ms_Food::create([
+            'id_food_category'=>@$request_body->id_food_category,
+            'food_name'=>@$request_body->food_name,
+            'chef_name'=>@$request_body->chef_name,
+            'description'=>@$request_body->description,
+            'price'=>@$request_body->price,
+            'qty'=>@$request_body->qty,
+            'picture'=>@$file_picture
           ]);
         }
         catch(\Illuminate\Database\QueryException $e)
@@ -281,73 +281,61 @@ class Room_Hardware_Controller extends Controller
           $controller_failed++;
         }
 
-        if(!empty($result->id_room_hardware))
+        if(!empty($result->id_food))
         {
           $data_out=(object)
             array(
-              'id_room_hardware'=>$result->id_room_hardware
+              'id_food'=>$result->id_food
           );
           $controller_success++;
-          $controller_message='Success to create new room hardware';
+          $controller_message.='Success to create new food';
         }
         else
         {
           $controller_failed++;
-          $controller_message.=', Failed to create new room hardware';
+          $controller_message.=', Failed to create new food';
         }
       }
       else
       {
-        $data_update=Dt_Room_Hardware::find($request_body->id_room_hardware);
+        $data_update=Ms_Food::find($request_body->id_food);
+        $path = 'assets/img';
         if(!empty($data_update))
         {
-          if(!empty($request_body->id_room_hardware))
+          if(!empty($request_body->id_food_category))
           {
-            $data_update->id_room_hardware = $request_body->id_room_hardware;
+            $data_update->id_food_category = $request_body->id_food_category;
           }
-          if(!empty($request_body->id_room))
+          if(!empty($request_body->food_name))
           {
-            $data_update->id_room = $request_body->id_room;
+            $data_update->food_name = $request_body->food_name;
           }
-          if(!empty($request_body->jenis_hardware))
+          if(!empty($request_body->chef_name))
           {
-            $data_update->jenis_hardware = $request_body->jenis_hardware;
+            $data_update->chef_name = $request_body->chef_name;
           }
-          if(!empty($request_body->nama_hardware))
+          if(!empty($request_body->detail))
           {
-            $data_update->nama_hardware = $request_body->nama_hardware;
+            $data_update->detail = $request_body->detail;
           }
-          if(!empty($request_body->koneksi))
+          if(!empty($request_body->price))
           {
-            $data_update->koneksi = $request_body->koneksi;
+            $data_update->price = $request_body->price;
           }
-          if(!empty($request_body->bluetooh_mac_address))
+          if(!empty($request_body->picture))
           {
-            $data_update->bluetooh_mac_address = $request_body->bluetooh_mac_address;
+            File::delete($path.'/'.$data_update->picture);
+            $pic_picture = $request->file('picture');
+            $pic_picture->move($path,$path,'FOOD_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension());
+            $data_update->picture = 'FOOD_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension();
           }
-          if(!empty($request_body->topic_mqtt))
+          if(!empty($request_body->qty))
           {
-            $data_update->topic_mqtt = $request_body->topic_mqtt;
-          }
-          if(!empty($request_body->mqtt_username))
-          {
-            $data_update->mqtt_username = $request_body->mqtt_username;
-          }
-          if(!empty($request_body->mqtt_password))
-          {
-            $data_update->mqtt_password = $request_body->mqtt_password;
-          }
-          if(!empty($request_body->ip_address))
-          {
-            $data_update->ip_address = $request_body->ip_address;
-          }
-          if(!empty($request_body->status))
-          {
-            $data_update->status = $request_body->status;
+            $data_update->qty = $request_body->qty;
           }
 
           try{
-              $execute = $data_update->save();
+            $execute = $data_update->save();
           }
           catch(\Illuminate\Database\QueryException $e)
           {
@@ -355,20 +343,19 @@ class Room_Hardware_Controller extends Controller
             $controller_failed++;
           }
 
-
-          if($execute)
+          if(@$execute)
           {
             $data_out=(object)
               array(
-                'id_room_hardware'=>$request_body->id_room_hardware
+                'id_food'=>$request_body->id_food
             );
             $controller_success++;
-            $controller_message='Success to update room hardware data';
+            $controller_message='Success to update food';
           }
           else
           {
             $controller_failed++;
-            $controller_message.=', Failed to update room hardware data';
+            $controller_message.=', Failed to update food';
           }
         }
         else
@@ -388,7 +375,7 @@ class Room_Hardware_Controller extends Controller
       set_format_api(
         @$data_out,
         array(
-          'primary'=>'id_room_hardware',
+          'primary'=>'id_food',
           'success'=>$check_result->success+$controller_success,
           'failed'=>$check_result->failed+$controller_failed,
           'message_front'=>$controller_message,
@@ -413,7 +400,7 @@ class Room_Hardware_Controller extends Controller
     }
     //Untuk melakukan pengecheckan data dan hanya untuk IN
     $checker=array(
-      'id_room_hardware'=>true
+      'id_food'=>true
     );
     $check_result=check_input_format($checker,$request_body);
     $controller_message='';
@@ -421,24 +408,24 @@ class Room_Hardware_Controller extends Controller
     $controller_success=0;
     if($check_result->accept)
     {
-      if(!is_array($request_body->id_room_hardware))
+      if(!is_array($request_body->id_food))
       {
-        $request_body->id_room_hardware=array($request_body->id_room_hardware);
+        $request_body->id_food=array($request_body->id_food);
       }
 
-      if(Dt_Room_Hardware::whereIn('id_room_hardware',$request_body->id_room_hardware)->delete())
+      if(Ms_Food::whereIn('id_food',$request_body->id_food)->delete())
       {
-        $data_out=$request_body->id_room_hardware;
-        if(is_array($request_body->id_room_hardware))
+        $data_out=$request_body->id_food;
+        if(is_array($request_body->id_food))
         {
-          $controller_success+=count($request_body->id_room_hardware);
+          $controller_success+=count($request_body->id_food);
         }
         else
         {
           $controller_success++;
         }
 
-        $controller_message='Success to delete room hardware';
+        $controller_message='Success to delete food';
       }
       else
       {
@@ -457,7 +444,7 @@ class Room_Hardware_Controller extends Controller
       set_format_api(
         @$data_out,
         array(
-          'primary'=>'id_room_hardware',
+          'primary'=>'id_food',
           'success'=>$check_result->success+$controller_success,
           'failed'=>$check_result->failed+$controller_failed,
           'message_front'=>$controller_message,

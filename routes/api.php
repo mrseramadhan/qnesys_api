@@ -56,6 +56,14 @@ Route::post('/Login', 'Login_Controller@login');
 Route::get('/User', 'User_Controller@read');
 Route::post('/User', 'User_Controller@create');
 
+Route::get('/CheckIO','Check_IO_Controller@read');
+Route::post('/CheckIO', 'Check_IO_Controller@create');
+Route::delete('/CheckIO','Check_IO_Controller@delete');
+
+Route::get('/Cart','Cart_Controller@read');
+Route::post('/Cart', 'Cart_Controller@create');
+Route::delete('/Cart','Cart_Controller@delete');
+
 Route::get('/Guest', 'Guest_Controller@read');
 Route::post('/Guest', 'Guest_Controller@create');
 Route::delete('/Guest', 'Guest_Controller@delete');
@@ -75,6 +83,18 @@ Route::delete('/RoomCategory', 'Room_Category_Controller@delete');
 Route::get('/RoomHardware', 'Room_Hardware_Controller@read');
 Route::post('/RoomHardware', 'Room_Hardware_Controller@create');
 Route::delete('/RoomHardware', 'Room_Hardware_Controller@delete');
+
+Route::get('/FoodCategory', 'Category_Food_Controller@read');
+Route::post('/FoodCategory', 'Category_Food_Controller@create');
+Route::delete('/FoodCategory', 'Category_Food_Controller@delete');
+
+Route::get('/Food', 'Food_Controller@read');
+Route::post('/Food', 'Food_Controller@create');
+Route::delete('/Food', 'Food_Controller@delete');
+
+Route::get('/Service', 'Service_Controller@read');
+Route::post('/Service', 'Service_Controller@create');
+Route::delete('/Service', 'Service_Controller@delete');
 
 Route::get('/Hotel','Hotel_Controller@read');
 Route::post('/Hotel', 'Hotel_Controller@create');

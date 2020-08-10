@@ -41,7 +41,7 @@ class Check_IO_Access_Controller extends Controller
       if($check_result->accept)
       {
           $select=explode(',',str_replace(" ","",$request_body->select));
-          $query=Dt_Check_IO_Access::with('guest')->with('check_io')->select($select);
+          $query=Dt_Check_IO_Access::select($select);
 
           if(empty($request_body->custom_condition)){
               if(is_array($request_body->where))
@@ -251,16 +251,31 @@ class Check_IO_Access_Controller extends Controller
         if(empty(@$request_body->id_check_io_access))
         {
 
-          try{
-            $result=Dt_Check_IO_Access::create([
-              'id_check_io'=>@$request_body->id_check_io,
-              'id_guest'=>@$request_body->id_guest,
-              'active'=>'1'
-            ]);
-          }
-          catch(\Illuminate\Database\QueryException $e)
+          $data_guess_access=Dt_Check_IO_Access::where('id_guest',@$request_body->id_guest)->where('id_check_io',@$request_body->id_check_io)->get();
+          $data_access_count=Dt_Check_IO_Access::where('id_check_io',@$request_body->id_check_io)->get();
+          if($data_guess_access->count()==0 && $data_access_count->count()<4)
           {
-            $controller_message.=''.$e->getMessage();
+            try{
+              $result=Dt_Check_IO_Access::create([
+                'id_check_io'=>@$request_body->id_check_io,
+                'id_guest'=>@$request_body->id_guest,
+                'active'=>'1'
+              ]);
+            }
+            catch(\Illuminate\Database\QueryException $e)
+            {
+              $controller_message.=''.$e->getMessage();
+              $controller_failed++;
+            }
+          }
+          else if($data_access_count->count()<4)
+          {
+            $controller_message.=''.'Sorry guest already got access in this check in room, id_check_io_access = '.$data_guess_access->first()->id_check_io_access;
+            $controller_failed++;
+          }
+          else
+          {
+            $controller_message.=''.'Sorry cant give access, maximum 4 access in 1 access check in room';
             $controller_failed++;
           }
 

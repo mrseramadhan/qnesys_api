@@ -9,6 +9,7 @@ if(!function_exists('get_api_patch'))
   {
     $version=array(
       'BETA'=>'x9W+m5YP{MCNd9/[&xxH0G$$!8sC~b34VWI!NrimN<}LAkWIk<a<MSYp"3qnF<n'
+
     );
     return $version['BETA'];
   }

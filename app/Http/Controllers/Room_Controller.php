@@ -37,7 +37,7 @@ class Room_Controller extends Controller
     if($check_result->accept)
     {
         $select=explode(',',str_replace(" ","",$request_body->select));
-        $query=Ms_Room::with('room_category')->select($select);
+        $query=Ms_Room::select($select);
 
         if(empty($request_body->custom_condition)){
             if(is_array($request_body->where))
