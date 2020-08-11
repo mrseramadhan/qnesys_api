@@ -266,7 +266,7 @@ class Public_Tv_Controller extends Controller
                     'status'       => $request_body->status,
                     'picture'      => $move_pic_map,
                   ]);
-    
+
                   if($result->id_public_tv)
                   {
                       $data_out=(object)

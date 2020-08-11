@@ -240,7 +240,7 @@ class Event_Controller extends Controller
         'event_name'     => true,
         'description'    => true,
         'start_at'       => true,
-        'end_at'         => true,        
+        'end_at'         => true,
       );
 
       $check_result=check_input_format($checker,$request_body);

@@ -265,7 +265,8 @@ class Check_IO_Controller extends Controller
             }
 
             $data_check_in=Tr_Check_IO::where('id_guest',@$request_body->id_guest)->where('datetime_checkout',null)->get();
-            if($data_check_in->count()==0)
+            //if($data_check_in->count()==0) JIKA 1 GUEST 1 CHECK IN MAKA NYALAKAN INI
+            if(true)
             {
               try{
                 $result=Tr_Check_IO::create([

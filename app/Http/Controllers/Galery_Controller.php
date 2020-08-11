@@ -349,7 +349,7 @@ class Galery_Controller extends Controller
       if($check_result->accept)
       {
         $data_galery = Ms_Galery::select('picture')->where('id_galery', $request_body->id_galery)->first();
-        if($data_hotel){
+        if($data_galery){
           $filepath = 'assets/img/';
           $picture = $filepath.$data_galery->picture;
           @unlink($picture);

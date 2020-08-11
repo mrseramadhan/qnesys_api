@@ -104,17 +104,17 @@ Route::get('/HotelFacilities','Hotel_Facilities_Controller@read');
 Route::post('/HotelFacilities','Hotel_Facilities_Controller@create');
 Route::delete('/HotelFacilities','Hotel_Facilities_Controller@delete');
 
-Route::get('/Around','Around_Controller@read');
-Route::post('/Around', 'Around_Controller@create');
-Route::delete('/Around','Around_Controller@delete');
+Route::get('/AroundHotel','Around_Controller@read');
+Route::post('/AroundHotel', 'Around_Controller@create');
+Route::delete('/AroundHotel','Around_Controller@delete');
 
 Route::get('/Event','Event_Controller@read');
 Route::post('/Event', 'Event_Controller@create');
 Route::delete('/Event','Event_Controller@delete');
 
-Route::get('/Category_Galery','Category_Galery_Controller@read');
-Route::post('/Category_Galery', 'Category_Galery_Controller@create');
-Route::delete('/Category_Galery','Category_Galery_Controller@delete');
+Route::get('/CategoryGalery','Category_Galery_Controller@read');
+Route::post('/CategoryGalery', 'Category_Galery_Controller@create');
+Route::delete('/CategoryGalery','Category_Galery_Controller@delete');
 
 Route::get('/Galery','Galery_Controller@read');
 Route::post('/Galery', 'Galery_Controller@create');
@@ -132,9 +132,18 @@ Route::get('/Facilities','Hotel_Facilities_Controller@read');
 Route::post('/Facilities', 'Hotel_Facilities_Controller@create');
 Route::delete('/Facilities','Hotel_Facilities_Controller@delete');
 
-Route::get('/Ssid','Ssid_Hotel_Controller@read');
-Route::post('/Ssid', 'Ssid_Hotel_Controller@create');
-Route::delete('/Ssid','Ssid_Hotel_Controller@delete');
+Route::get('/PublicTV','Public_Tv_Controller@read');
+Route::post('/PublicTV', 'Public_Tv_Controller@create');
+Route::delete('/PublicTV','Public_Tv_Controller@delete');
+
+Route::get('/SSID','Ssid_Hotel_Controller@read');
+Route::post('/SSID', 'Ssid_Hotel_Controller@create');
+Route::delete('/SSID','Ssid_Hotel_Controller@delete');
+
+Route::get('/Provinsi','Provinsi_Controller@read');
+Route::get('/Kabupaten','Kabupaten_Controller@read');
+Route::get('/Kelurahan','Kelurahan_Controller@read');
+
 
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');
