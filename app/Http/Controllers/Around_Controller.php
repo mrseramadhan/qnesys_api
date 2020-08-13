@@ -253,13 +253,15 @@ class Around_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
+        $move_picture = 'Around_'.$picture->getClientOriginalName();
   
-        $picture->move($path,$picture->getClientOriginalName());
+        $picture->move($path,$move_picture);
         if($request_body->id_around_hotel == null){
+          try{
             $result=Ms_Around_Hotel::create([
                 'id_hotel'          => $request_body->id_hotel,
                 'name'              => $request_body->name,
-                'picture'           => $picture->getClientOriginalName(),
+                'picture'           => $move_picture,
                 'description'       => $request_body->description,
                 'range'             => $request_body->range,
                 'grouping'          => $request_body->grouping,
@@ -279,19 +281,36 @@ class Around_Controller extends Controller
                   $controller_failed++;
                   $controller_message='Failed to create new around hotel';
               }
+            }
+              catch(\Illuminate\Database\QueryException $e)
+            {
+              $controller_message.=''.$e->getMessage();
+              $controller_failed++;
+            }
         }else{
             $result=Ms_Around_Hotel::where('id_around_hotel','=',$request_body->id_around_hotel)
                 ->update([
                     'id_hotel'          => $request_body->id_hotel,
                     'name'              => $request_body->name,
-                    'picture'           => $picture->getClientOriginalName(),
+                    'picture'           => $move_picture,
                     'description'       => $request_body->description,
                     'range'             => $request_body->range,
                     'grouping'          => $request_body->grouping,
               ]);
-
-            $controller_success++;
-            $controller_message='Success to update around hotel';
+              if($result)
+              {
+                  $data_out=(object)
+                    array(
+                    'id_around_hotel'=>$result->id_around_hotel
+                  );
+                  $controller_success++;
+                  $controller_message='Success to update around hotel';
+              }
+              else
+              {
+                  $controller_failed++;
+                  $controller_message='Failed to update around hotel';
+              }
         }
       }
       else
@@ -337,6 +356,20 @@ class Around_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
+        $data_around = Ms_Around_Hotel::select('picture')->where('id_around_hotel', $request_body->id_around_hotel)->first();
+        if($data_around){
+          $filepath = 'assets/img/';
+          $picture = $filepath.$data_around->picture;
+          @unlink($picture);
+        }else{
+          $controller_failed++;
+          $controller_message='Data not found';
+        }
+
+        if(!is_array($request_body->id_around_hotel))
+      	{
+          $request_body->id_around_hotel=array($request_body->id_around_hotel);
+        }
         if(Ms_Around_Hotel::whereIn('id_around_hotel',$request_body->id_around_hotel)->delete())
         {
           $data_out=$request_body->id_around_hotel;

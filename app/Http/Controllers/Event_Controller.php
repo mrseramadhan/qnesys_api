@@ -349,6 +349,10 @@ class Event_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
+        if(!is_array($request_body->id_event))
+      	{
+        	$request_body->id_event=array($request_body->id_event);
+      	}
         if(Ms_Event::whereIn('id_event',$request_body->id_event)->delete())
         {
           $data_out=$request_body->id_event;
