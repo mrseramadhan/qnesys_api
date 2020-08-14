@@ -156,6 +156,10 @@ Route::get('/Dt_Channel_Remote','Channel_Remote_Controller@read');
 Route::post('/Dt_Channel_Remote', 'Channel_Remote_Controller@create');
 Route::delete('/Dt_Channel_Remote','Channel_Remote_Controller@delete');
 
+Route::get('/Tr_Tv_Channel_Used','Tv_Channel_Used_Controller@read');
+Route::post('/Tr_Tv_Channel_Used', 'Tv_Channel_Used_Controller@create');
+Route::delete('/Tr_Tv_Channel_Used','Tv_Channel_Used_Controller@delete');
+
 
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');
