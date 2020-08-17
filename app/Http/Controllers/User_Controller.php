@@ -236,9 +236,11 @@ class User_Controller extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'name'=>true,
         'username'=>true,
-        'password'=>true
+        'name'=>true,
+        'password'=>true,
+        'id_division_privilege'=>true,
+        'id_division'=>true,
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -248,9 +250,11 @@ class User_Controller extends Controller
       if($check_result->accept)
       {
         $result=Ms_User::create([
-          'name'=>$request_body->name,
           'username'=>$request_body->username,
-          'password'=>password_hash($request_body->password, PASSWORD_DEFAULT)
+          'name'=>$request_body->name,
+          'password'=>password_hash($request_body->password, PASSWORD_DEFAULT),
+          'id_division_privilege'=>$request_body->id_division_privilege,
+          'id_division'=>$request_body->id_division,
         ]);
         if(!empty($result->id_user))
         {
@@ -316,7 +320,7 @@ class User_Controller extends Controller
         {
           if(!empty($request_body->name))
           {
-            $data_update->name = $request_body->name;
+            $data_update->name = $request->name;
           }
           if(!empty($request_body->username))
           {
@@ -325,6 +329,14 @@ class User_Controller extends Controller
           if(!empty($request_body->password))
           {
             $data_update->password = password_hash($request_body->password, PASSWORD_DEFAULT);
+          }
+          if(!empty($request_body->id_division_privilege))
+          {
+            $data_update->id_division_privilege = $request->id_division_privilege;
+          }
+          if(!empty($request_body->id_division))
+          {
+            $data_update->id_division = $request->id_division;
           }
         	$execute = $data_update->save();
           if($execute)

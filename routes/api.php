@@ -64,6 +64,10 @@ Route::get('/Cart','Cart_Controller@read');
 Route::post('/Cart', 'Cart_Controller@create');
 Route::delete('/Cart','Cart_Controller@delete');
 
+Route::get('/CartItem','Cart_Item_Controller@read');
+Route::post('/CartItem', 'Cart_Item_Controller@create');
+Route::delete('/CartItem','Cart_Item_Controller@delete');
+
 Route::get('/Guest', 'Guest_Controller@read');
 Route::post('/Guest', 'Guest_Controller@create');
 Route::delete('/Guest', 'Guest_Controller@delete');
@@ -71,6 +75,30 @@ Route::delete('/Guest', 'Guest_Controller@delete');
 Route::get('/GuestAccess', 'Check_IO_Access_Controller@read');
 Route::post('/GuestAccess', 'Check_IO_Access_Controller@create');
 Route::delete('/GuestAccess', 'Check_IO_Access_Controller@delete');
+
+Route::get('/Billing', 'Billing_Controller@read');
+// Route::post('/Billing', 'Billing_Controller@create');
+// Route::delete('/Billing', 'Billing_Controller@delete');
+
+Route::get('/BillingItem', 'Billing_Item_Controller@read');
+// Route::post('/BillingItem', 'Billing_Item_Controller@create');
+// Route::delete('/BillingItem', 'Billing_Item_Controller@delete');
+
+Route::get('/Division', 'Division_Controller@read');
+Route::post('/Division', 'Division_Controller@create');
+Route::delete('/Division', 'Division_Controller@delete');
+
+Route::get('/DivisionPrivilege', 'Division_Privilege_Controller@read');
+Route::post('/DivisionPrivilege', 'Division_Privilege_Controller@create');
+Route::delete('/DivisionPrivilege', 'Division_Privilege_Controller@delete');
+
+Route::get('/DivisionPrivilegeMenu', 'Division_Privilege_Menu_Controller@read');
+Route::post('/DivisionPrivilegeMenu', 'Division_Privilege_Menu_Controller@create');
+Route::delete('/DivisionPrivilegeMenu', 'Division_Privilege_Menu_Controller@delete');
+
+Route::get('/Menu', 'Menu_Controller@read');
+Route::post('/Menu', 'Menu_Controller@create');
+Route::delete('/Menu', 'Menu_Controller@delete');
 
 Route::get('/Room', 'Room_Controller@read');
 Route::post('/Room', 'Room_Controller@create');

@@ -69,6 +69,10 @@ if (!function_exists('check_input_format')) {
           else
           {
             $sample=$data;
+            if(method_exists($data,'toArray'))
+            {
+              $data = (object)$data->toArray();
+            }
             foreach ($checker as $key_checker => $row_checker) {
               if(property_exists($data, $key_checker))
               {
@@ -146,11 +150,15 @@ if (!function_exists('set_format_api')) {
       {
         if(@count(@$data)>1 && is_array(@$data))
         {
-          array_walk_recursive($data, function(&$item)
-            {
-              $item=strval($item);
-            }
-          );
+          // array_walk_recursive($data, function(&$item)
+          //   {
+          //     $item=strval($item);
+          //   }
+          // );
+          $data = json_encode($data);
+          $data = str_replace("null","\"\"",$data);
+          $data = json_decode($data);
+
           $return_data["data"]=$data;
           $return_data['type']='list';
           $return_data['count']=count(@$data);
@@ -158,11 +166,18 @@ if (!function_exists('set_format_api')) {
         }
         else
         {
-          array_walk_recursive($data, function(&$item)
-            {
-              $item=strval($item);
-            }
-          );
+          // array_walk($data,function(&$value,$key){
+          //     $value=(array) $value;
+          // });
+          // array_walk_recursive($data, function($value,$key){
+          //     $value=strval($value);
+          // });
+          //$data[0]->code_kelurahan=strval
+
+          $data = json_encode($data);
+          $data = str_replace("null","\"\"",$data);
+          $data = json_decode($data);
+
           if(is_array(@$data))
           {
             $return_data["data"]=array($data[0]);

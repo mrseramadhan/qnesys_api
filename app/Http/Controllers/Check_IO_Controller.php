@@ -345,10 +345,10 @@ class Check_IO_Controller extends Controller
               {
                 $data_update->datetime_checkin = $request_body->datetime_checkin;
               }
-              if(!empty($request_body->datetime_checkout))
-              {
-                $data_update->datetime_checkout = $request_body->datetime_checkout;
-              }
+              // if(!empty($request_body->datetime_checkout))
+              // {
+              //   $data_update->datetime_checkout = $request_body->datetime_checkout;
+              // }
 
               try{
                 $execute = $data_update->save();
