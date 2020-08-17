@@ -250,7 +250,7 @@ class Galery_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $move_picture = 'Galery_'.$picture->getClientOriginalName();
+        $move_picture = 'Galery_'.date('dmYHis').'.'.$picture->getClientOriginalName();
         $picture->move($path,$move_picture);
 
         if($request_body->id_galery == null){

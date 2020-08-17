@@ -172,6 +172,22 @@ Route::get('/Provinsi','Provinsi_Controller@read');
 Route::get('/Kabupaten','Kabupaten_Controller@read');
 Route::get('/Kelurahan','Kelurahan_Controller@read');
 
+Route::get('/Tv_Category','Tv_Category_Controller@read');
+Route::post('/Tv_Category', 'Tv_Category_Controller@create');
+Route::delete('/Tv_Category','Tv_Category_Controller@delete');
+
+Route::get('/Tv_Channel','Tv_Channel_Controller@read');
+Route::post('/Tv_Channel', 'Tv_Channel_Controller@create');
+Route::delete('/Tv_Channel','Tv_Channel_Controller@delete');
+
+Route::get('/Dt_Channel_Remote','Channel_Remote_Controller@read');
+Route::post('/Dt_Channel_Remote', 'Channel_Remote_Controller@create');
+Route::delete('/Dt_Channel_Remote','Channel_Remote_Controller@delete');
+
+Route::get('/Tr_Tv_Channel_Used','Tv_Channel_Used_Controller@read');
+Route::post('/Tr_Tv_Channel_Used', 'Tv_Channel_Used_Controller@create');
+Route::delete('/Tr_Tv_Channel_Used','Tv_Channel_Used_Controller@delete');
+
 
 Route::group(['middleware' => '\App\Http\Middleware\ApiTokenProtector'],function(){
   Route::put('/User', 'User_Controller@update')->middleware('\App\Http\Middleware\HandlePutFormData');

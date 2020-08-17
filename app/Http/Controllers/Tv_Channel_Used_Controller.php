@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use app\Format_API;
-use App\Ms_Around_Hotel;
+use App\Format_API;
+use App\Tr_Tv_Channel_Used;
 use Exception;
 
-class Around_Controller extends Controller
+class Tv_Channel_Used_Controller extends Controller
 {
     function read(Request $request)
     {
@@ -39,7 +39,7 @@ class Around_Controller extends Controller
       if($check_result->accept)
       {
           $select=explode(',',str_replace(" ","",$request_body->select));
-          $query=Ms_Around_Hotel::select($select);
+          $query=Tr_Tv_Channel_Used::select($select);
 
           if(empty($request_body->custom_condition)){
               if(is_array($request_body->where))
@@ -186,11 +186,11 @@ class Around_Controller extends Controller
             try{
               if(!empty($request_body->select))
               {
-                $data_out=DB::select('SELECT '.$request_body->select.' from ms_around_hotel WHERE '.$request_body->custom_condition);
+                $data_out=DB::select('SELECT '.$request_body->select.' from tr_tv_channel_used WHERE '.$request_body->custom_condition);
               }
               else
               {
-                $data_out=DB::select('SELECT * from ms_around_hotel WHERE '.$request_body->custom_condition);
+                $data_out=DB::select('SELECT * from tr_tv_channel_used WHERE '.$request_body->custom_condition);
               }
               $controller_success++;
             }
@@ -211,7 +211,7 @@ class Around_Controller extends Controller
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_around_hotel',
+            'primary'=>'id_tv_channel_used',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -236,12 +236,9 @@ class Around_Controller extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'id_hotel'       => true,
-        'name'           => true,
-        'picture'        => true,
-        'description'    => true,
-        'range'          => true,
-        'grouping'       => true,        
+        'id_tv_channel' => true,
+        'id_hotel'      => true,
+        'status'        => true,
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -251,65 +248,55 @@ class Around_Controller extends Controller
 
       if($check_result->accept)
       {
-        $picture = $request->file('picture');
-        $path = 'assets/img';
-        $move_picture = 'Around_'.$picture->getClientOriginalName();
-  
-        $picture->move($path,$move_picture);
-        if($request_body->id_around_hotel == null){
-          try{
-            $result=Ms_Around_Hotel::create([
-                'id_hotel'          => $request_body->id_hotel,
-                'name'              => $request_body->name,
-                'picture'           => $move_picture,
-                'description'       => $request_body->description,
-                'range'             => $request_body->range,
-                'grouping'          => $request_body->grouping,
-              ]);
-
-              if($result->id_around_hotel)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_around_hotel'=>$result->id_around_hotel
-                  );
-                  $controller_success++;
-                  $controller_message='Success to create new around hotel';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to create new around hotel';
-              }
+        if($request_body->id_tv_channel_used == null){
+            try{
+                $result=Tr_Tv_Channel_Used::create([
+                    'id_tv_channel'  => $request_body->id_tv_channel,
+                    'id_hotel'       => $request_body->id_hotel,
+                    'status'         => $request_body->status,
+                  ]);
+    
+                  if($result->id_tv_channel_used)
+                  {
+                      $data_out=(object)
+                        array(
+                        'id_tv_channel_used'=>$result->id_tv_channel_used
+                      );
+                      $controller_success++;
+                      $controller_message='Success to create new tv channel used';
+                  }
+                  else
+                  {
+                      $controller_failed++;
+                      $controller_message='Failed to create new tv channel used';
+                  }
             }
-              catch(\Illuminate\Database\QueryException $e)
+            catch(\Illuminate\Database\QueryException $e)
             {
               $controller_message.=''.$e->getMessage();
               $controller_failed++;
             }
         }else{
-            $result=Ms_Around_Hotel::where('id_around_hotel','=',$request_body->id_around_hotel)
+            $result=Tr_Tv_Channel_Used::where('id_tv_channel_used','=',$request_body->id_tv_channel_used)
                 ->update([
-                    'id_hotel'          => $request_body->id_hotel,
-                    'name'              => $request_body->name,
-                    'picture'           => $move_picture,
-                    'description'       => $request_body->description,
-                    'range'             => $request_body->range,
-                    'grouping'          => $request_body->grouping,
+                    'id_tv_channel'  => $request_body->id_tv_channel,
+                    'id_hotel'       => $request_body->id_hotel,
+                    'status'         => $request_body->status,
               ]);
+
               if($result)
               {
                   $data_out=(object)
                     array(
-                    'id_around_hotel'=>$result->id_around_hotel
+                    'id_tv_channel_used'=>$request_body->id_tv_channel_used
                   );
                   $controller_success++;
-                  $controller_message='Success to update around hotel';
+                  $controller_message='Success to update tv channel used';
               }
               else
               {
                   $controller_failed++;
-                  $controller_message='Failed to update around hotel';
+                  $controller_message='Failed to update tv channel used';
               }
         }
       }
@@ -323,7 +310,7 @@ class Around_Controller extends Controller
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_around_hotel',
+            'primary'=>'id_tv_channel_used',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -335,7 +322,7 @@ class Around_Controller extends Controller
       ;
 
     }
-
+ 
     function delete(Request $request)
     {
       if(is_json($request->getContent()))
@@ -348,7 +335,7 @@ class Around_Controller extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'id_around_hotel'=>true
+        'id_tv_channel_used'=>true
       );
       $check_result=check_input_format($checker,$request_body);
       $controller_message='';
@@ -356,39 +343,29 @@ class Around_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        $data_around = Ms_Around_Hotel::select('picture')->where('id_around_hotel', $request_body->id_around_hotel)->first();
-        if($data_around){
-          $filepath = 'assets/img/';
-          $picture = $filepath.$data_around->picture;
-          @unlink($picture);
-        }else{
-          $controller_failed++;
-          $controller_message='Data not found';
-        }
-
-        if(!is_array($request_body->id_around_hotel))
+        if(!is_array($request_body->id_tv_channel_used))
       	{
-          $request_body->id_around_hotel=array($request_body->id_around_hotel);
-        }
-        if(Ms_Around_Hotel::whereIn('id_around_hotel',$request_body->id_around_hotel)->delete())
-        {
-          $data_out=$request_body->id_around_hotel;
-          if(is_array($request_body->id_around_hotel))
+        	$request_body->id_tv_channel_used=array($request_body->id_tv_channel_used);
+          if(Tr_Tv_Channel_Used::whereIn('id_tv_channel_used',$request_body->id_tv_channel_used)->delete())
           {
-            $controller_success+=count($request_body->id_around_hotel);
+            $data_out=$request_body->id_tv_channel_used;
+            if(is_array($request_body->id_tv_channel_used))
+            {
+              $controller_success+=count($request_body->id_tv_channel_used);
+            }
+            else
+            {
+              $controller_success++;
+            }
+
+            $controller_message='Success to delete tv channel used';
           }
           else
           {
-            $controller_success++;
+            $controller_failed++;
+            $controller_message='Data not found';
           }
-
-          $controller_message='Success to delete around hotel';
-        }
-        else
-        {
-          $controller_failed++;
-          $controller_message='Data not found';
-        }
+      	}
       }
       else
       {
@@ -401,7 +378,7 @@ class Around_Controller extends Controller
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_around_hotel',
+            'primary'=>'id_tv_channel_used',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,

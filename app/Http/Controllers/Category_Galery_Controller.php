@@ -330,6 +330,10 @@ class Category_Galery_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
+        if(!is_array($request_body->id_category_galery))
+      	{
+          $request_body->id_category_galery=array($request_body->id_category_galery);
+        }
         if(Ms_Category_Galery::whereIn('id_category_galery',$request_body->id_category_galery)->delete())
         {
           $data_out=$request_body->id_category_galery;
