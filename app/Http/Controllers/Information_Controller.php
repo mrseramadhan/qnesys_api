@@ -80,7 +80,14 @@ class Information_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Information_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -250,7 +264,7 @@ class Information_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $move_picture = 'Information_'.$picture->getClientOriginalName();
+        $move_picture = 'Information_'.date('dmYHis').'.'.$picture->getClientOriginalName();
         $picture->move($path,$move_picture);
 
         if($request_body->id_information == null){
@@ -348,7 +362,6 @@ class Information_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-
         $data_information = Ms_Information::select('picture')->where('id_information', $request_body->id_information)->first();
         if($data_information){
           $filepath = 'assets/img/';
@@ -358,7 +371,6 @@ class Information_Controller extends Controller
             $controller_failed++;
             $controller_message='Data not found';
         }
-        
         if(!is_array($request_body->id_information))
       	{
         	$request_body->id_information=array($request_body->id_information);

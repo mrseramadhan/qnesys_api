@@ -9,7 +9,7 @@ use App\Ms_Tv_Channel;
 use Exception;
 
 class Tv_Channel_Controller extends Controller
-{ 
+{
     function read(Request $request)
     {
       if(is_json($request->getContent()))
@@ -80,7 +80,14 @@ class Tv_Channel_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Tv_Channel_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -253,8 +267,8 @@ class Tv_Channel_Controller extends Controller
       {
         $logo = $request->file('logo');
         $path = 'assets/img';
-  
-        $move_logo = 'Tv_Channel_'.$logo->getClientOriginalName();
+
+        $move_logo = 'Tv_Channel_'.date('dmYHis').'.'.$logo->getClientOriginalName();
 
         $logo->move($path,$move_logo);
 
@@ -268,7 +282,7 @@ class Tv_Channel_Controller extends Controller
                     'logo'           => $move_logo,
                     'url'            => $request_body->url,
                   ]);
-    
+
                   if($result->id_tv_channel)
                   {
                       $data_out=(object)
@@ -338,7 +352,7 @@ class Tv_Channel_Controller extends Controller
       ;
 
     }
- 
+
     function delete(Request $request)
     {
       if(is_json($request->getContent()))

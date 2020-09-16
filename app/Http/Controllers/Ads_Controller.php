@@ -78,9 +78,13 @@ class Ads_Controller extends Controller
               if(is_array($request_body->where_in))
               {
                 foreach ($request_body->where_in as $key => $row) {
-                    if(!empty(@$row->field) && !empty(@$row->value))
+                    if(is_array(@$row->value))
                     {
                       $query->whereIn(@$row->field,$row->value);
+                    }
+                    else
+                    {
+                      $query->whereIn(@$row->field,array($row->value));
                     }
                 }
               }
@@ -88,7 +92,14 @@ class Ads_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -211,7 +222,7 @@ class Ads_Controller extends Controller
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_ads',
+            'primary'=>'id_master_ads',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -238,12 +249,8 @@ class Ads_Controller extends Controller
       $checker=array(
         'id_hotel'      => true,
         'nama_produk'   => true,
-        'file_type'     => true,
-        'timer'         => true,
-        'position'      => true,
-        'type'          => true,        
-        'range_time'    => true,        
-        'active'        => true,        
+        'file'          => true,
+        'active'        => true,
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -253,37 +260,34 @@ class Ads_Controller extends Controller
 
       if($check_result->accept)
       {
-        // $picture = $request->file('picture');
-        // $path = 'assets/img';
-        // $move_picture = 'Ads_'.date('dmYHis').'.'.$picture->getClientOriginalName();
-  
-        // $picture->move($path,$move_picture);
-        if($request_body->id_ads == null){
+        $file = $request->file('file');
+        $path = 'assets/img';
+        $move_file = 'ADS_'.date('dmYHis').'.'.$file->getClientOriginalName();
+
+        $file->move($path,$move_file);
+
+        if($request_body->id_master_ads == null){
           try{
             $result=Ms_Ads::create([
                 'id_hotel'     => $request_body->id_hotel,
                 'nama_produk'  => $request_body->nama_produk,
-                'file_type'    => $request_body->file_type,
-                'timer'        => $request_body->timer,
-                'type'         => $request_body->type,
-                'position'     => $request_body->position,
-                'range_time'   => $request_body->range_time,
+                'file'         => $move_file,
                 'active'       => $request_body->active,
               ]);
 
-              if($result->id_ads)
+              if($result->id_master_ads)
               {
                   $data_out=(object)
                     array(
-                    'id_ads'=>$result->id_ads
+                    'id_master_ads'=>$result->id_master_ads
                   );
                   $controller_success++;
-                  $controller_message='Success to create new ads';
+                  $controller_message='Success to create new master ads';
               }
               else
               {
                   $controller_failed++;
-                  $controller_message='Failed to create new ads';
+                  $controller_message='Failed to create new master ads';
               }
             }
               catch(\Illuminate\Database\QueryException $e)
@@ -292,30 +296,26 @@ class Ads_Controller extends Controller
               $controller_failed++;
             }
         }else{
-            $result=Ms_Ads::where('id_ads','=',$request_body->id_ads)
+            $result=Ms_Ads::where('id_master_ads','=',$request_body->id_master_ads)
                 ->update([
                   'id_hotel'     => $request_body->id_hotel,
                   'nama_produk'  => $request_body->nama_produk,
-                  'file_type'    => $request_body->file_type,
-                  'timer'        => $request_body->timer,
-                  'type'         => $request_body->type,
-                  'position'     => $request_body->position,
-                  'range_time'   => $request_body->range_time,
+                  'file'         => $move_file,
                   'active'       => $request_body->active,
               ]);
               if($result)
               {
                   $data_out=(object)
                     array(
-                    'id_ads'=>$request_body->id_ads
+                    'id_master_ads'=>$request_body->id_master_ads
                   );
                   $controller_success++;
-                  $controller_message='Success to update ads';
+                  $controller_message='Success to update master ads';
               }
               else
               {
                   $controller_failed++;
-                  $controller_message='Failed to update ads';
+                  $controller_message='Failed to update master ads';
               }
         }
       }
@@ -329,7 +329,7 @@ class Ads_Controller extends Controller
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_ads',
+            'primary'=>'id_master_ads',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -354,7 +354,7 @@ class Ads_Controller extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'id_ads'=>true
+        'id_master_ads'=>true
       );
       $check_result=check_input_format($checker,$request_body);
       $controller_message='';
@@ -362,7 +362,7 @@ class Ads_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        // $data_around = Ms_Ads::select('picture')->where('id_ads', $request_body->id_ads)->first();
+        // $data_around = Ms_Ads::select('picture')->where('id_master_ads', $request_body->id_master_ads)->first();
         // if($data_around){
         //   $filepath = 'assets/img/';
         //   $picture = $filepath.$data_around->picture;
@@ -372,23 +372,23 @@ class Ads_Controller extends Controller
         //   $controller_message='Data not found';
         // }
 
-        if(!is_array($request_body->id_ads))
+        if(!is_array($request_body->id_master_ads))
       	{
-          $request_body->id_ads=array($request_body->id_ads);
+          $request_body->id_master_ads=array($request_body->id_master_ads);
         }
-        if(Ms_Ads::whereIn('id_ads',$request_body->id_ads)->delete())
+        if(Ms_Ads::whereIn('id_master_ads',$request_body->id_master_ads)->delete())
         {
-          $data_out=$request_body->id_ads;
-          if(is_array($request_body->id_ads))
+          $data_out=$request_body->id_master_ads;
+          if(is_array($request_body->id_master_ads))
           {
-            $controller_success+=count($request_body->id_ads);
+            $controller_success+=count($request_body->id_master_ads);
           }
           else
           {
             $controller_success++;
           }
 
-          $controller_message='Success to delete ads';
+          $controller_message='Success to delete master ads';
         }
         else
         {
@@ -407,7 +407,7 @@ class Ads_Controller extends Controller
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_ads',
+            'primary'=>'id_master_ads',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,

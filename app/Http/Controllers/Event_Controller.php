@@ -80,7 +80,14 @@ class Event_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Event_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -241,6 +255,11 @@ class Event_Controller extends Controller
         'description'    => true,
         'start_at'       => true,
         'end_at'         => true,
+        'picture'        => true,
+        'lat'            => true,
+        'lng'            => true,
+        'tempat'         => true,
+        'kota'           => true
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -251,6 +270,15 @@ class Event_Controller extends Controller
       if($check_result->accept)
       {
         if($request_body->id_event == null){
+          $pic_picture = $request->file('picture');
+          $file_picture='';
+          $path = 'assets/img';
+
+          if(!empty($request_body->picture))
+          {
+            $pic_picture->move($path,'Event_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension());
+            $file_picture='Event_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension();
+          }
           try{
             $result=Ms_Event::create([
               'id_hotel'          => $request_body->id_hotel,
@@ -258,6 +286,11 @@ class Event_Controller extends Controller
               'description'       => $request_body->description,
               'start_at'          => $request_body->start_at,
               'end_at'            => $request_body->end_at,
+              'picture'           => @$file_picture,
+              'lat'               => $request_body->lat,
+              'lng'               => $request_body->lng,
+              'tempat'            => $request_body->tempat,
+              'kota'              => $request_body->kota,
             ]);
 
             if($result->id_event)
@@ -288,6 +321,11 @@ class Event_Controller extends Controller
                     'description'       => $request_body->description,
                     'start_at'          => $request_body->start_at,
                     'end_at'            => $request_body->end_at,
+                    'picture'           => @$file_picture,
+                    'lat'               => $request_body->lat,
+                    'lng'               => $request_body->lng,
+                    'tempat'            => $request_body->tempat,
+                    'kota'              => $request_body->kota,
               ]);
 
               if($result)
@@ -349,6 +387,16 @@ class Event_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
+        $data_event = Ms_Event::select('picture')->where('id_event', $request_body->id_event)->first();
+        if($data_event){
+          $filepath = 'assets/img/';
+          $pict_map = $filepath.$data_event->picture;
+          @unlink($pict_map);
+        }else{
+          $controller_failed++;
+          $controller_message='Data not found';
+        }
+
         if(!is_array($request_body->id_event))
       	{
         	$request_body->id_event=array($request_body->id_event);

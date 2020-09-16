@@ -11,6 +11,7 @@ class Ms_Room extends Model
       'id_room_category',
       'no_room',
       'status',
+      'lantai'
   ];
   protected $primaryKey = 'id_room';
 

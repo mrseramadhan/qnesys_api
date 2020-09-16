@@ -9,7 +9,7 @@ use App\Ms_Tv_Category;
 use Exception;
 
 class Tv_Category_Controller extends Controller
-{ 
+{
     function read(Request $request)
     {
       if(is_json($request->getContent()))
@@ -80,7 +80,14 @@ class Tv_Category_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Tv_Category_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -251,7 +265,7 @@ class Tv_Category_Controller extends Controller
                 $result=Ms_Tv_Category::create([
                     'description' => $request_body->description,
                   ]);
-    
+
                   if($result->id_tv_category)
                   {
                       $data_out=(object)
@@ -316,7 +330,7 @@ class Tv_Category_Controller extends Controller
       ;
 
     }
- 
+
     function delete(Request $request)
     {
       if(is_json($request->getContent()))

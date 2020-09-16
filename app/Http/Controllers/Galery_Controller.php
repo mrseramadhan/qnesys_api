@@ -80,7 +80,14 @@ class Galery_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Galery_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -238,7 +252,9 @@ class Galery_Controller extends Controller
       $checker=array(
         'id_category_galery'    => true,
         'id_hotel'              => true,
-        'picture'               => true
+        'picture'               => true,
+        'galery_name'           => true,
+        'description'           => true
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -258,7 +274,9 @@ class Galery_Controller extends Controller
             $result=Ms_Galery::create([
               'id_category_galery'    => $request_body->id_category_galery,
               'id_hotel'              => $request_body->id_hotel,
-              'picture'               => $move_picture
+              'picture'               => $move_picture,
+              'galery_name'           => $request_body->galery_name,
+              'description'           => $request_body->description
             ]);
 
             if($result->id_galery)
@@ -286,7 +304,9 @@ class Galery_Controller extends Controller
                 ->update([
                     'id_category_galery'    => $request_body->id_category_galery,
                     'id_hotel'              => $request_body->id_hotel,
-                    'picture'               => $move_picture
+                    'picture'               => $move_picture,
+                    'galery_name'           => $request_body->galery_name,
+                    'description'           => $request_body->description
               ]);
 
               if($result)

@@ -162,7 +162,10 @@ if (!function_exists('set_format_api')) {
           $return_data["data"]=$data;
           $return_data['type']='list';
           $return_data['count']=count(@$data);
-          $option['message_front'].='Data was found '.count(@$data);
+          if(@$option['failed']==0)
+          {
+            $option['message_front'].='Data was found '.count(@$data);
+          }
         }
         else
         {
@@ -178,21 +181,21 @@ if (!function_exists('set_format_api')) {
           $data = str_replace("null","\"\"",$data);
           $data = json_decode($data);
 
-          if(is_array(@$data))
+          if(is_array(@$data) && @$option['failed']==0)
           {
             $return_data["data"]=array($data[0]);
             $return_data['type']='list';
             $return_data['count']=1;
             $option['message_front'].=', Data was found 1';
           }
-          else if(is_object(@$data))
+          else if(is_object(@$data) && @$option['failed']==0)
           {
             $return_data["data"]=array($data);
             $return_data['type']='list';
             $return_data['count']=1;
             $option['message_front'].=', Data was found 1';
           }
-          else
+          else if(@$option['failed']==0)
           {
             $return_data["data"]=$data;
             $return_data['type']='string';

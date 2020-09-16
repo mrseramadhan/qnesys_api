@@ -40,12 +40,12 @@ class Login_Controller extends Controller
        $controller_success=0;
        if($check_result->accept)
        {
-         $result_user=Ms_User::where('username',$request_body->username)->get();
+         $result_user=Ms_User::where('username',$request_body->username)->join('ms_division', 'ms_user.id_division', '=', 'ms_division.id_division')->join('ms_division_privilege','ms_user.id_division_privilege','=','ms_division_privilege.id_division_privilege')->get();
          if($result_user->count()>0)
          {
            if(password_verify($request_body->password,$result_user->first()->password))
            {
-             Sy_Token::where('active', 1)->update(['active' => 0]);
+             Sy_Token::where('active', 1)->where('id_user', $result_user->first()->id_user)->update(['active' => 0]);
              $token=Str::random('5').date('d').Str::random('5').date('m').Str::random('5').date('y').Str::random('5').date('H').Str::random('5').date('i').Str::random('5').date('s');
              $result=Sy_Token::create([
                'token'=>$token,
@@ -53,7 +53,15 @@ class Login_Controller extends Controller
                'active'=>1
              ]);
              $controller_success++;
-             $data_out=$token;
+             $data_out=(object)
+             array(
+              'token'=>$token,
+              'id_hotel'=>@$result_user->first()->id_hotel,
+              'id_privilage'=>@$result_user->first()->id_division_privilege,
+              'privilage_name'=>@$result_user->first()->division_privilege_name,
+              'division_name'=>@$result_user->first()->division_name,
+             );
+            //  $data_out=$token;
              $controller_message='Success to create new token';
            }
            else

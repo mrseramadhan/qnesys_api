@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Format_API;
 use App\Dt_Channel_Remote;
 use Exception;
- 
+
 class Channel_Remote_Controller extends Controller
-{ 
+{
     function read(Request $request)
     {
       if(is_json($request->getContent()))
@@ -80,7 +80,14 @@ class Channel_Remote_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Channel_Remote_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -253,7 +267,7 @@ class Channel_Remote_Controller extends Controller
                     'id_tv_channel' => $request_body->id_tv_channel,
                     'status'        => $request_body->status,
                   ]);
-    
+
                   if($result->id_channel_remote)
                   {
                       $data_out=(object)

@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use app\Format_API;
-use App\Dt_Ads_Iptv_Location;
+use App\Ms_Ads_Iptv_Location;
 use Exception;
 
-class Ads_Iptv_Controller extends Controller
+class Ads_Iptv_Location_Controller extends Controller
 {
     function read(Request $request)
     {
@@ -39,7 +39,7 @@ class Ads_Iptv_Controller extends Controller
       if($check_result->accept)
       {
           $select=explode(',',str_replace(" ","",$request_body->select));
-          $query=Dt_Ads_Iptv_Location::select($select);
+          $query=Ms_Ads_Iptv_Location::select($select);
 
           if(empty($request_body->custom_condition)){
               if(is_array($request_body->where))
@@ -78,9 +78,13 @@ class Ads_Iptv_Controller extends Controller
               if(is_array($request_body->where_in))
               {
                 foreach ($request_body->where_in as $key => $row) {
-                    if(!empty(@$row->field) && !empty(@$row->value))
+                    if(is_array(@$row->value))
                     {
                       $query->whereIn(@$row->field,$row->value);
+                    }
+                    else
+                    {
+                      $query->whereIn(@$row->field,array($row->value));
                     }
                 }
               }
@@ -88,7 +92,14 @@ class Ads_Iptv_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -186,11 +197,11 @@ class Ads_Iptv_Controller extends Controller
             try{
               if(!empty($request_body->select))
               {
-                $data_out=DB::select('SELECT '.$request_body->select.' from dt_ads_iptv_location WHERE '.$request_body->custom_condition);
+                $data_out=DB::select('SELECT '.$request_body->select.' from ms_ads_iptv_location WHERE '.$request_body->custom_condition);
               }
               else
               {
-                $data_out=DB::select('SELECT * from dt_ads_iptv_location WHERE '.$request_body->custom_condition);
+                $data_out=DB::select('SELECT * from ms_ads_iptv_location WHERE '.$request_body->custom_condition);
               }
               $controller_success++;
             }
@@ -236,8 +247,7 @@ class Ads_Iptv_Controller extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'id_ads_location_type'  => true,
-        'id_ads'                => true,
+        'ads_location'=> true,
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -249,14 +259,13 @@ class Ads_Iptv_Controller extends Controller
       {
         // $picture = $request->file('picture');
         // $path = 'assets/img';
-        // $move_picture = 'Around_'.$picture->getClientOriginalName();
-  
+        // $move_picture = 'Ads_'.date('dmYHis').'.'.$picture->getClientOriginalName();
+
         // $picture->move($path,$move_picture);
         if($request_body->id_ads_location == null){
           try{
-            $result=Dt_Ads_Iptv_Location::create([
-                'id_ads_location_type'      => $request_body->id_ads_location_type,
-                'id_ads'                    => $request_body->id_ads,
+            $result=Ms_Ads_Iptv_Location::create([
+                'ads_location'     => $request_body->ads_location,
               ]);
 
               if($result->id_ads_location)
@@ -266,12 +275,12 @@ class Ads_Iptv_Controller extends Controller
                     'id_ads_location'=>$result->id_ads_location
                   );
                   $controller_success++;
-                  $controller_message='Success to create new detail ads location';
+                  $controller_message='Success to create new ads location';
               }
               else
               {
                   $controller_failed++;
-                  $controller_message='Failed to create new detail ads location';
+                  $controller_message='Failed to create new ads location';
               }
             }
               catch(\Illuminate\Database\QueryException $e)
@@ -280,10 +289,9 @@ class Ads_Iptv_Controller extends Controller
               $controller_failed++;
             }
         }else{
-            $result=Dt_Ads_Iptv_Location::where('id_ads_location','=',$request_body->id_ads_location)
+            $result=Ms_Ads_Iptv_Location::where('id_ads_location','=',$request_body->id_ads_location)
                 ->update([
-                    'id_ads_location_type'      => $request_body->id_ads_location_type,
-                    'id_ads'                    => $request_body->id_ads,
+                    'id_ads_location'     => $request_body->id_ads_location,
               ]);
               if($result)
               {
@@ -292,12 +300,12 @@ class Ads_Iptv_Controller extends Controller
                     'id_ads_location'=>$request_body->id_ads_location
                   );
                   $controller_success++;
-                  $controller_message='Success to update detail ads location';
+                  $controller_message='Success to update ads location';
               }
               else
               {
                   $controller_failed++;
-                  $controller_message='Failed to update detail ads location';
+                  $controller_message='Failed to update ads location';
               }
         }
       }
@@ -344,7 +352,7 @@ class Ads_Iptv_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        // $data_around = Dt_Ads_Iptv_Location::select('picture')->where('id_ads_location', $request_body->id_ads_location)->first();
+        // $data_around = Ms_Ads::select('picture')->where('id_ads', $request_body->id_ads)->first();
         // if($data_around){
         //   $filepath = 'assets/img/';
         //   $picture = $filepath.$data_around->picture;
@@ -358,7 +366,7 @@ class Ads_Iptv_Controller extends Controller
       	{
           $request_body->id_ads_location=array($request_body->id_ads_location);
         }
-        if(Dt_Ads_Iptv_Location::whereIn('id_ads_location',$request_body->id_ads_location)->delete())
+        if(Ms_Ads_Iptv_Location::whereIn('id_ads_location',$request_body->id_ads_location)->delete())
         {
           $data_out=$request_body->id_ads_location;
           if(is_array($request_body->id_ads_location))
@@ -370,7 +378,7 @@ class Ads_Iptv_Controller extends Controller
             $controller_success++;
           }
 
-          $controller_message='Success to delete detail ads location';
+          $controller_message='Success to delete ads location';
         }
         else
         {

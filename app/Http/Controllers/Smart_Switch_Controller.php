@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use app\Format_API;
-use App\Ms_Ads_Iptv_Location_Type;
-use Exception;
+use App\Format_API;
+use App\Dt_Smart_Switch;
 
-class Ads_Iptv_Location_Type extends Controller
+class Smart_Switch_Controller extends Controller
 {
     function read(Request $request)
     {
@@ -31,7 +30,7 @@ class Ads_Iptv_Location_Type extends Controller
         'offset'=>true,
         'custom_condition'=>true
       );
-
+  
       $check_result=check_input_format($checker,$request_body);
       $controller_message='';
       $controller_failed=0;
@@ -39,8 +38,8 @@ class Ads_Iptv_Location_Type extends Controller
       if($check_result->accept)
       {
           $select=explode(',',str_replace(" ","",$request_body->select));
-          $query=Ms_Ads_Iptv_Location_Type::select($select);
-
+          $query=Dt_Smart_Switch::select($select);
+  
           if(empty($request_body->custom_condition)){
               if(is_array($request_body->where))
               {
@@ -73,8 +72,8 @@ class Ads_Iptv_Location_Type extends Controller
                   $controller_failed++;
                 }
               }
-
-
+  
+  
               if(is_array($request_body->where_in))
               {
                 foreach ($request_body->where_in as $key => $row) {
@@ -96,7 +95,7 @@ class Ads_Iptv_Location_Type extends Controller
                   $controller_failed++;
                 }
               }
-
+  
               if(is_array($request_body->like))
               {
                 foreach ($request_body->like as $key => $row) {
@@ -128,7 +127,7 @@ class Ads_Iptv_Location_Type extends Controller
                   $controller_failed++;
                 }
               }
-
+  
               if(is_array($request_body->order))
               {
                 foreach ($request_body->order as $key => $row) {
@@ -160,12 +159,12 @@ class Ads_Iptv_Location_Type extends Controller
                   $controller_failed++;
                 }
               }
-
+  
               if(!empty($request_body->limit))
               {
                 $query->limit($request_body->limit);
               }
-
+  
               if(!empty($request_body->offset))
               {
                 $query->offset($request_body->offset);
@@ -179,18 +178,18 @@ class Ads_Iptv_Location_Type extends Controller
                 $controller_message.=''.$e->getMessage();
                 $controller_failed++;
               }
-
+  
           }
           else
           {
             try{
               if(!empty($request_body->select))
               {
-                $data_out=DB::select('SELECT '.$request_body->select.' from ms_ads_iptv_location_type WHERE '.$request_body->custom_condition);
+                $data_out=DB::select('SELECT '.$request_body->select.' from dt_smart_switch WHERE '.$request_body->custom_condition);
               }
               else
               {
-                $data_out=DB::select('SELECT * from ms_ads_iptv_location_type WHERE '.$request_body->custom_condition);
+                $data_out=DB::select('SELECT * from dt_smart_switch WHERE '.$request_body->custom_condition);
               }
               $controller_success++;
             }
@@ -206,12 +205,12 @@ class Ads_Iptv_Location_Type extends Controller
           $controller_failed++;
           $controller_message.='Format not accepted';
       }
-
+  
       return response(
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_ads',
+            'primary'=>'id_smart_switch',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -221,9 +220,9 @@ class Ads_Iptv_Location_Type extends Controller
         ->header('Content-Type', 'json')
         ->header('API-Version', get_api_patch())
       ;
-
+  
     }
-
+  
     function create(Request $request)
     {
       if(is_json($request->getContent()))
@@ -236,66 +235,126 @@ class Ads_Iptv_Location_Type extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'ads_location_type'      => true,       
+        'id_room'=>true,
+        'type_koneksi'=>true,
+        'ip_address'=>true,
+        'kode_produk'=>true,
+        //'bluetooh_mac_address'=>true,
+        'mqtt_topic'=>true,
+        'mqtt_username'=>true,
+        'mqtt_password'=>true,
+        'ip_address'=>true,
+        //'status'=>true
       );
-
+  
       $check_result=check_input_format($checker,$request_body);
       $controller_message='';
       $controller_failed=0;
       $controller_success=0;
-
       if($check_result->accept)
       {
-        // $picture = $request->file('picture');
-        // $path = 'assets/img';
-        // $move_picture = 'Ads_'.date('dmYHis').'.'.$picture->getClientOriginalName();
-  
-        // $picture->move($path,$move_picture);
-        if($request_body->id_ads_location_type == null){
+        if(empty(@$request_body->id_smart_switch))
+        {
           try{
-            $result=Ms_Ads_Iptv_Location_Type::create([
-                'ads_location_type'     => $request_body->id_ads_location_type,
-              ]);
-
-              if($result->id_ads_location_type)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_ads_location_type'=>$result->id_ads_location_type
-                  );
-                  $controller_success++;
-                  $controller_message='Success to create new ads location type';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to create new ads location type';
-              }
+            $result=Dt_Smart_Switch::create([
+              'id_room'=>@$request_body->id_room,
+              'type_koneksi'=>@$request_body->type_koneksi,
+              'kode_produk'=>@$request_body->kode_produk,
+              'mqtt_topic'=>@$request_body->mqtt_topic,
+              'mqtt_username'=>@$request_body->mqtt_username,
+              'mqtt_password'=>@$request_body->mqtt_password,
+              'ip_address'=>@$request_body->ip_address,
+            ]);
+          }
+          catch(\Illuminate\Database\QueryException $e)
+          {
+            $controller_message.=''.$e->getMessage();
+            $controller_failed++;
+          }
+  
+          if(!empty($result->id_smart_switch))
+          {
+            $data_out=(object)
+              array(
+                'id_smart_switch'=>$result->id_smart_switch
+            );
+            $controller_success++;
+            $controller_message='Success to create new smart switch';
+          }
+          else
+          {
+            $controller_failed++;
+            $controller_message.=', Failed to create new smart switch';
+          }
+        }
+        else
+        {
+          $data_update=Dt_Smart_Switch::find($request_body->id_smart_switch);
+          if(!empty($data_update))
+          {
+            if(!empty($request_body->id_smart_switch))
+            {
+              $data_update->id_smart_switch = $request_body->id_smart_switch;
             }
-              catch(\Illuminate\Database\QueryException $e)
+            if(!empty($request_body->id_room))
+            {
+              $data_update->id_room = $request_body->id_room;
+            }
+            if(!empty($request_body->kode_produk))
+            {
+              $data_update->kode_produk = $request_body->kode_produk;
+            }
+            if(!empty($request_body->type_koneksi))
+            {
+              $data_update->type_koneksi = $request_body->type_koneksi;
+            }
+            if(!empty($request_body->mqtt_topic))
+            {
+              $data_update->mqtt_topic = $request_body->mqtt_topic;
+            }
+            if(!empty($request_body->mqtt_username))
+            {
+              $data_update->mqtt_username = $request_body->mqtt_username;
+            }
+            if(!empty($request_body->mqtt_password))
+            {
+              $data_update->mqtt_password = $request_body->mqtt_password;
+            }
+            if(!empty($request_body->ip_address))
+            {
+              $data_update->ip_address = $request_body->ip_address;
+            }
+  
+            try{
+                $execute = $data_update->save();
+            }
+            catch(\Illuminate\Database\QueryException $e)
             {
               $controller_message.=''.$e->getMessage();
               $controller_failed++;
             }
-        }else{
-            $result=Ms_Ads_Iptv_Location_Type::where('id_ads_location_type','=',$request_body->id_ads_location_type)
-                ->update([
-                    'id_ads_location_type'     => $request_body->id_ads_location_type,
-              ]);
-              if($result)
-              {
-                  $data_out=(object)
-                    array(
-                    'id_ads_location_type'=>$request_body->id_ads_location_type
-                  );
-                  $controller_success++;
-                  $controller_message='Success to update ads location type';
-              }
-              else
-              {
-                  $controller_failed++;
-                  $controller_message='Failed to update ads location type';
-              }
+  
+  
+            if($execute)
+            {
+              $data_out=(object)
+                array(
+                  'id_smart_switch'=>$request_body->id_smart_switch
+              );
+              $controller_success++;
+              $controller_message='Success to update smart switch data';
+            }
+            else
+            {
+              $controller_failed++;
+              $controller_message.=', Failed to update smart switch data';
+            }
+          }
+          else
+          {
+            $controller_failed++;
+            $controller_message='Data not found';
+          }
         }
       }
       else
@@ -303,12 +362,12 @@ class Ads_Iptv_Location_Type extends Controller
           $controller_failed++;
           $controller_message='Format not accepted';
       }
-
+  
       return response(
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_ads_location_type',
+            'primary'=>'id_smart_switch',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -318,9 +377,9 @@ class Ads_Iptv_Location_Type extends Controller
         ->header('Content-Type', 'json')
         ->header('API-Version', get_api_patch())
       ;
-
+  
     }
-
+  
     function delete(Request $request)
     {
       if(is_json($request->getContent()))
@@ -333,7 +392,7 @@ class Ads_Iptv_Location_Type extends Controller
       }
       //Untuk melakukan pengecheckan data dan hanya untuk IN
       $checker=array(
-        'id_ads_location_type'=>true
+        'id_smart_switch'=>true
       );
       $check_result=check_input_format($checker,$request_body);
       $controller_message='';
@@ -341,33 +400,24 @@ class Ads_Iptv_Location_Type extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        // $data_around = Ms_Ads::select('picture')->where('id_ads', $request_body->id_ads)->first();
-        // if($data_around){
-        //   $filepath = 'assets/img/';
-        //   $picture = $filepath.$data_around->picture;
-        //   @unlink($picture);
-        // }else{
-        //   $controller_failed++;
-        //   $controller_message='Data not found';
-        // }
-
-        if(!is_array($request_body->id_ads_location_type))
-      	{
-          $request_body->id_ads_location_type=array($request_body->id_ads_location_type);
-        }
-        if(Ms_Ads_Iptv_Location_Type::whereIn('id_ads_location_type',$request_body->id_ads_location_type)->delete())
+        if(!is_array($request_body->id_smart_switch))
         {
-          $data_out=$request_body->id_ads_location_type;
-          if(is_array($request_body->id_ads_location_type))
+          $request_body->id_smart_switch=array($request_body->id_smart_switch);
+        }
+  
+        if(Dt_Smart_Switch::whereIn('id_smart_switch',$request_body->id_smart_switch)->delete())
+        {
+          $data_out=$request_body->id_smart_switch;
+          if(is_array($request_body->id_smart_switch))
           {
-            $controller_success+=count($request_body->id_ads_location_type);
+            $controller_success+=count($request_body->id_smart_switch);
           }
           else
           {
             $controller_success++;
           }
-
-          $controller_message='Success to delete ads location type';
+  
+          $controller_message='Success to delete smart switch';
         }
         else
         {
@@ -380,13 +430,13 @@ class Ads_Iptv_Location_Type extends Controller
         $controller_failed++;
         $controller_message='Format not accepted';
       }
-
-
+  
+  
       return response(
         set_format_api(
           @$data_out,
           array(
-            'primary'=>'id_ads_location_type',
+            'primary'=>'id_smart_switch',
             'success'=>$check_result->success+$controller_success,
             'failed'=>$check_result->failed+$controller_failed,
             'message_front'=>$controller_message,
@@ -396,6 +446,6 @@ class Ads_Iptv_Location_Type extends Controller
         ->header('Content-Type', 'json')
         ->header('API-Version', get_api_patch())
       ;
-
+  
     }
 }

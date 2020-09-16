@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use app\Format_API;
 use App\Ms_Hotel;
+use Str;
 use Exception;
 
 class Hotel_Controller extends Controller
@@ -97,7 +98,14 @@ class Hotel_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -105,7 +113,14 @@ class Hotel_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -280,10 +295,10 @@ class Hotel_Controller extends Controller
         $pic_logo_hotel = $request->file('logo_hotel');
         $pic_wallpaper = $request->file('wallpaper');
         $path = 'assets/img';
-  
-        $move_pic_map = 'Hotel_'.$pic_map->getClientOriginalName();
-        $move_pic_logo_hotel = 'Hotel_'.$pic_logo_hotel->getClientOriginalName();
-        $move_pic_wallpaper = 'Hotel_'.$pic_wallpaper->getClientOriginalName();
+
+        $move_pic_map = 'Hotel_'.date('dmYHis').'.'.$pic_map->getClientOriginalName();
+        $move_pic_logo_hotel = 'Hotel_'.date('dmYHis').'.'.$pic_logo_hotel->getClientOriginalName();
+        $move_pic_wallpaper = 'Hotel_'.date('dmYHis').'.'.$pic_wallpaper->getClientOriginalName();
 
         $pic_map->move($path,$move_pic_map);
         $pic_logo_hotel->move($path,$move_pic_logo_hotel);
@@ -293,6 +308,7 @@ class Hotel_Controller extends Controller
             $result=Ms_Hotel::create([
                 'id_corporation'      => $request_body->id_corporation,
                 'hotel_name'          => $request_body->hotel_name,
+                'hotel_code'          => 'QNESYS_'.Str::random('2').date('d').Str::random('3').date('m').Str::random('2').date('y').Str::random('3').date('H').Str::random('2').date('i').Str::random('3').date('s'),
                 'hotel_address'       => $request_body->hotel_address,
                 'hotel_phone'         => $request_body->hotel_phone,
                 'pos_code'            => $request_body->pos_code,
@@ -398,7 +414,7 @@ class Hotel_Controller extends Controller
       $controller_failed=0;
       $controller_success=0;
       if($check_result->accept)
-      { 
+      {
 
         $data_hotel = Ms_Hotel::select('pict_map','logo_hotel','wallpaper')->where('id_hotel', $request_body->id_hotel)->first();
         if($data_hotel){
@@ -414,29 +430,34 @@ class Hotel_Controller extends Controller
           $controller_message='Data not found';
         }
 
-        if(!is_array($request_body->id_hotel))
-      	{
-        	$request_body->id_hotel=array($request_body->id_hotel);
-          if(Ms_Hotel::whereIn('id_hotel',$request_body->id_hotel)->delete())
-          {
-            $data_out=$request_body->id_hotel;
-            if(is_array($request_body->id_hotel))
-            {
-              $controller_success+=count($request_body->id_hotel);
-            }
-            else
-            {
-              $controller_success++;
-            }
+      	try{
+            if(!is_array($request_body->id_hotel))
+          	{
+            	  $request_body->id_hotel=array($request_body->id_hotel);
+                  if(Ms_Hotel::whereIn('id_hotel',$request_body->id_hotel)->delete())
+                  {
+                    $data_out=$request_body->id_hotel;
+                    if(is_array($request_body->id_hotel))
+                    {
+                      $controller_success+=count($request_body->id_hotel);
+                    }
+                    else
+                    {
+                      $controller_success++;
+                    }
 
-            $controller_message='Success to delete hotel';
-          }
-          else
-          {
-            $controller_failed++;
-            $controller_message='Data not found';
-          }
-      	}
+                    $controller_message='Success to delete hotel';
+                  }
+                  else
+                  {
+                    $controller_failed++;
+                    $controller_message='Data not found';
+                  }
+          	}
+  	    }catch(\Illuminate\Database\QueryException $e){
+          $controller_message.=''.$e->getMessage();
+          $controller_failed++;
+        }
       }
       else
       {

@@ -39,7 +39,7 @@ class User_Controller extends Controller
       if($check_result->accept)
       {
           $select=explode(',',str_replace(" ","",$request_body->select));
-          $query=Ms_User::select($select);
+          $query=Ms_User::select($select)->join('ms_division','ms_division.id_division','=','ms_user.id_division')->join('ms_division_privilege','ms_division_privilege.id_division_privilege','=','ms_user.id_division_privilege');
 
           if(empty($request_body->custom_condition)){
               if(is_array($request_body->where))
@@ -80,7 +80,14 @@ class User_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class User_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -249,13 +263,21 @@ class User_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
-        $result=Ms_User::create([
-          'username'=>$request_body->username,
-          'name'=>$request_body->name,
-          'password'=>password_hash($request_body->password, PASSWORD_DEFAULT),
-          'id_division_privilege'=>$request_body->id_division_privilege,
-          'id_division'=>$request_body->id_division,
-        ]);
+        try{
+          $result=Ms_User::create([
+            'username'=>$request_body->username,
+            'name'=>$request_body->name,
+            'password'=>password_hash($request_body->password, PASSWORD_DEFAULT),
+            'id_division_privilege'=>$request_body->id_division_privilege,
+            'id_division'=>$request_body->id_division,
+          ]);
+        }
+        catch(\Illuminate\Database\QueryException $e)
+        {
+          $controller_message.=''.$e->getMessage();
+          $controller_failed++;
+        }
+
         if(!empty($result->id_user))
         {
           $data_out=(object)
@@ -268,7 +290,7 @@ class User_Controller extends Controller
         else
         {
           $controller_failed++;
-          $controller_message='Failed to create new user';
+          $controller_message.='Failed to create new user';
         }
       }
       else
@@ -404,6 +426,11 @@ class User_Controller extends Controller
       $controller_success=0;
       if($check_result->accept)
       {
+        if(!is_array($request_body->id_user))
+        {
+          $request_body->id_user=array($request_body->id_user);
+        }
+
         if(Ms_User::whereIn('id_user',$request_body->id_user)->delete())
         {
           $data_out=$request_body->id_user;

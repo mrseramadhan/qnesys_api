@@ -80,7 +80,14 @@ class Around_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Around_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -240,8 +254,10 @@ class Around_Controller extends Controller
         'name'           => true,
         'picture'        => true,
         'description'    => true,
+        'lat'            => true,
+        'lng'            => true,
         'range'          => true,
-        'grouping'       => true,        
+        'id_category_around_hotel'       => true,
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -253,8 +269,8 @@ class Around_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $move_picture = 'Around_'.$picture->getClientOriginalName();
-  
+        $move_picture = 'Around_'.date('dmYHis').'.'.$picture->getClientOriginalExtension();
+
         $picture->move($path,$move_picture);
         if($request_body->id_around_hotel == null){
           try{
@@ -264,7 +280,9 @@ class Around_Controller extends Controller
                 'picture'           => $move_picture,
                 'description'       => $request_body->description,
                 'range'             => $request_body->range,
-                'grouping'          => $request_body->grouping,
+                'lat'               => $request_body->lat,
+                'lng'               => $request_body->lng,
+                'id_category_around_hotel'          => $request_body->id_category_around_hotel,
               ]);
 
               if($result->id_around_hotel)
@@ -295,14 +313,16 @@ class Around_Controller extends Controller
                     'picture'           => $move_picture,
                     'description'       => $request_body->description,
                     'range'             => $request_body->range,
-                    'grouping'          => $request_body->grouping,
+                    'lat'               => $request_body->lat,
+                    'lng'               => $request_body->lng,
+                    'id_category_around_hotel'          => $request_body->id_category_around_hotel,
               ]);
               if($result)
               {
                   $data_out=(object)
                     array(
-                    'id_around_hotel'=>$result->id_around_hotel
-                  );
+                      'id_around_hotel'=>$request_body->id_around_hotel
+                    );
                   $controller_success++;
                   $controller_message='Success to update around hotel';
               }

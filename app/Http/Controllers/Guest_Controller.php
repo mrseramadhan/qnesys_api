@@ -80,7 +80,14 @@ class Guest_Controller extends Controller
               foreach ($request_body->where_in as $key => $row) {
                   if(!empty(@$row->field) && !empty(@$row->value))
                   {
-                    $query->whereIn(@$row->field,$row->value);
+                    if(is_array(@$row->value))
+                    {
+                      $query->whereIn(@$row->field,$row->value);
+                    }
+                    else
+                    {
+                      $query->whereIn(@$row->field,array($row->value));
+                    }
                   }
               }
             }
@@ -88,7 +95,14 @@ class Guest_Controller extends Controller
             {
               if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
               {
-                $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                if(is_array(@$request_body->where_in->value))
+                {
+                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                }
+                else
+                {
+                  $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                }
               }
               else
               {
@@ -255,13 +269,13 @@ class Guest_Controller extends Controller
 
         if(!empty($request->photo))
         {
-          $pic_photo->move($path,$pic_photo->getClientOriginalName());
-          $file_photo=$pic_photo->getClientOriginalName();
+          $file_photo='Guest_'.date('dmYHis').'.'.$pic_photo->getClientOriginalName();
+          $pic_photo->move($path,$file_photo->getClientOriginalName());
         }
         if(!empty($request->scan_ktp))
         {
-          $pic_scan_ktp->move($path,$pic_scan_ktp->getClientOriginalName());
-          $file_scan_ktp=$pic_scan_ktp->getClientOriginalName();
+          $file_scan_ktp='Guest_'.date('dmYHis').'.'.$pic_scan_ktp->getClientOriginalName();
+          $pic_scan_ktp->move($path,$file_scan_ktp->getClientOriginalName());
         }
         if(empty($request_body->guest_name))
         {

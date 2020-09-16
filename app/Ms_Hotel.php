@@ -9,6 +9,7 @@ class Ms_Hotel extends Model
     protected $table = 'ms_hotel';
     protected $fillable = [
         'id_hotel',
+        'hotel_code',
         'id_corporation',
         'hotel_name',
         'hotel_address',

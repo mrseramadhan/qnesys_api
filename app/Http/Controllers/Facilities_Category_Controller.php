@@ -80,7 +80,14 @@ class Facilities_Category_Controller extends Controller
                 foreach ($request_body->where_in as $key => $row) {
                     if(!empty(@$row->field) && !empty(@$row->value))
                     {
-                      $query->whereIn(@$row->field,$row->value);
+                      if(is_array(@$row->value))
+                      {
+                        $query->whereIn(@$row->field,$row->value);
+                      }
+                      else
+                      {
+                        $query->whereIn(@$row->field,array($row->value));
+                      }
                     }
                 }
               }
@@ -88,7 +95,14 @@ class Facilities_Category_Controller extends Controller
               {
                 if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
                 {
-                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  if(is_array(@$request_body->where_in->value))
+                  {
+                    $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                  }
+                  else
+                  {
+                    $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                  }
                 }
                 else
                 {
@@ -238,7 +252,9 @@ class Facilities_Category_Controller extends Controller
       $checker=array(
         'id_hotel'                    => true,
         'category_facilities_name'    => true,
-        'picture'                     => true
+        'picture'                     => true,
+        'id_galery'                   => true,
+        'description'                 => true,
       );
 
       $check_result=check_input_format($checker,$request_body);
@@ -250,7 +266,7 @@ class Facilities_Category_Controller extends Controller
       {
         $picture = $request->file('picture');
         $path = 'assets/img';
-        $move_picture = 'Facilities_Category'.$picture->getClientOriginalName();
+        $move_picture = 'Facilities_Category'.date('dmYHis').'.'.$picture->getClientOriginalName();
         $picture->move($path,$move_picture);
 
         if($request_body->id_facilities_category == null){
@@ -258,7 +274,9 @@ class Facilities_Category_Controller extends Controller
             $result=Ms_Facilities_Category::create([
               'id_hotel'                           => $request_body->id_hotel,
               'category_facilities_name'           => $request_body->category_facilities_name,
-              'picture'                            => $move_picture
+              'picture'                            => $move_picture,
+              'description'                        => $request_body->description,
+              'id_galery'                          => $request_body->id_galery
             ]);
 
             if($result->id_facilities_category)
@@ -286,9 +304,11 @@ class Facilities_Category_Controller extends Controller
                 ->update([
                     'id_hotel'                           => $request_body->id_hotel,
                     'category_facilities_name'           => $request_body->category_facilities_name,
-                    'picture'                            => $move_picture
+                    'picture'                            => $move_picture,
+                    'description'                        => $request_body->description,
+                    'id_galery'                          => $request_body->id_galery
               ]);
- 
+
               if($result)
               {
                   $data_out=(object)

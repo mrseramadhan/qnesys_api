@@ -40,7 +40,7 @@ class Food_Controller extends Controller
     if($check_result->accept)
     {
         $select=explode(',',str_replace(" ","",$request_body->select));
-        $query=Ms_Food::select($select);
+        $query=Ms_Food::select('ms_food.*','ms_category_food.id_food_category','ms_category_food.food_category')->join('ms_category_food','ms_category_food.id_food_category', '=', 'ms_food.id_food_category');
 
         if(empty($request_body->custom_condition)){
             if(is_array($request_body->where))
@@ -81,7 +81,14 @@ class Food_Controller extends Controller
               foreach ($request_body->where_in as $key => $row) {
                   if(!empty(@$row->field) && !empty(@$row->value))
                   {
-                    $query->whereIn(@$row->field,$row->value);
+                    if(is_array(@$row->value))
+                    {
+                      $query->whereIn(@$row->field,$row->value);
+                    }
+                    else
+                    {
+                      $query->whereIn(@$row->field,array($row->value));
+                    }
                   }
               }
             }
@@ -89,7 +96,14 @@ class Food_Controller extends Controller
             {
               if(!empty(@$request_body->where_in->field) && !empty(@$request_body->where_in->value))
               {
-                $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                if(is_array(@$request_body->where_in->value))
+                {
+                  $query->whereIn(@$request_body->where_in->field,@$request_body->where_in->value);
+                }
+                else
+                {
+                  $query->whereIn(@$request_body->where_in->field,array(@$request_body->where_in->value));
+                }
               }
               else
               {
@@ -242,7 +256,7 @@ class Food_Controller extends Controller
       'chef_name'=>true,
       'description'=>true,
       'price'=>true,
-      'qty'=>true,
+      'available_qty'=>true,
       'picture'=>true,
     );
 
@@ -271,7 +285,7 @@ class Food_Controller extends Controller
             'chef_name'=>@$request_body->chef_name,
             'description'=>@$request_body->description,
             'price'=>@$request_body->price,
-            'qty'=>@$request_body->qty,
+            'available_qty'=>@$request_body->available_qty,
             'picture'=>@$file_picture
           ]);
         }
@@ -329,9 +343,9 @@ class Food_Controller extends Controller
             $pic_picture->move($path,$path,'FOOD_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension());
             $data_update->picture = 'FOOD_'.date('dmYHis').'.'.$pic_picture->getClientOriginalExtension();
           }
-          if(!empty($request_body->qty))
+          if(!empty($request_body->available_qty))
           {
-            $data_update->qty = $request_body->qty;
+            $data_update->available_qty = $request_body->available_qty;
           }
 
           try{
