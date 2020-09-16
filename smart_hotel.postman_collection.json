@@ -1,0 +1,2545 @@
+{
+	"info": {
+		"_postman_id": "a319d25a-6a81-414a-ad62-5a7f47ef8031",
+		"name": "smart_hotel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "API-Token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "septian",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "woofer",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Septian Ramadhan",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/User",
+					"protocol": "http",
+					"host": [
+						"candahar",
+						"com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"User"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "API-Token",
+						"value": "GjjDy30ewLEZ07r26XP20Lo42R04zLMpW04PdEc131",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_user",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "asep1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "woofer",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/User",
+					"protocol": "http",
+					"host": [
+						"candahar",
+						"com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"User"
+					],
+					"query": [
+						{
+							"key": "id_user",
+							"value": "11",
+							"disabled": true
+						},
+						{
+							"key": "username",
+							"value": "Asep",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "woofer",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "API-Token",
+						"value": "GjjDy30ewLEZ07r26XP20Lo42R04zLMpW04PdEc131",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_user[0]",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "id_user[1]",
+							"value": "16",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/User",
+					"protocol": "http",
+					"host": [
+						"candahar",
+						"com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"User"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/User",
+					"protocol": "http",
+					"host": [
+						"candahar",
+						"com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"User"
+					],
+					"query": [
+						{
+							"key": "select",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "where",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "where_in",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "asep",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "woofer",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Login",
+					"protocol": "http",
+					"host": [
+						"candahar",
+						"com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Provinsi",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"2\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Provinsi",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Provinsi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Kabupaten",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"2\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Kabupaten",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Kabupaten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Kelurahan",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"2\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Kelurahan",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Kelurahan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AroundHotel",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/AroundHotel",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"AroundHotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AroundHotel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "rumah",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Pictures/37856288_1709790769074264_7301614385120673792_n.jpg"
+						},
+						{
+							"key": "description",
+							"value": "this is from rumah merchandise shop",
+							"type": "text"
+						},
+						{
+							"key": "range",
+							"value": "100 meter",
+							"type": "text"
+						},
+						{
+							"key": "grouping",
+							"value": "Merchandise",
+							"type": "text"
+						},
+						{
+							"key": "id_around_hotel",
+							"value": "6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/AroundHotel",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"AroundHotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AroundHotel",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_around_hotel",
+							"value": "6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/AroundHotel",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"AroundHotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Guest",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Guest",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Guest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Guest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_guest",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "scan_ktp",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/ritz-carlton-primary-black.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Guest",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Guest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Guest",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_guest",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Guest",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Guest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GuestAccess",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/GuestAccess",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"GuestAccess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GuestAccess",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_check_io",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "id_guest",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "id_check_io_access",
+							"value": "11",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/GuestAccess",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"GuestAccess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GuestAccess",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_check_io_access[]",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "id_check_io_access[]",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "id_check_io_access[]",
+							"value": "8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/GuestAccess",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"GuestAccess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CheckIO",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/CheckIO",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"CheckIO"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CheckIO",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "id_room",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "id_guest",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "datetime_checkin",
+							"value": "2020-08-11 11:31:00",
+							"type": "text"
+						},
+						{
+							"key": "order_via",
+							"value": "Live",
+							"type": "text"
+						},
+						{
+							"key": "id_check_io",
+							"value": "6",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "datetime_checkout",
+							"value": "2020-08-12 23:59:49",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/CheckIO",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"CheckIO"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CheckIO",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_check_io",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/CheckIO",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"CheckIO"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Cart",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_check_io",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "is_done",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "id_cart",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "active",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Cart",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_cart",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Cart",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hotel",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Hotel",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Hotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hotel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "pict_map",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/Lobby-5.jpg"
+						},
+						{
+							"key": "logo_hotel",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/ritz-carlton-primary-black.png"
+						},
+						{
+							"key": "wallpaper",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/50550471-Grand Room - Hendro Edit-1.jpg"
+						},
+						{
+							"key": "id_corporation",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "hotel_name",
+							"value": "Ritz Calton",
+							"type": "text"
+						},
+						{
+							"key": "hotel_address",
+							"value": "Jl. DR. Ide Anak Agung Gde Agung Kav.E.1.1 No. 1, Kuningan, Daerah Khusus Ibukota Jakarta 12950",
+							"type": "text"
+						},
+						{
+							"key": "hotel_phone",
+							"value": "(021) 25518888",
+							"type": "text"
+						},
+						{
+							"key": "pos_code",
+							"value": "12950",
+							"type": "text"
+						},
+						{
+							"key": "code_provinsi",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "code_kabupaten\n",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "code_kelurahan",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "npwp",
+							"value": "123456789",
+							"type": "text"
+						},
+						{
+							"key": "pkp_npkp",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "map_coordinate",
+							"value": "-6.227588, 106.824310",
+							"type": "text"
+						},
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Hotel",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Hotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hotel",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Hotel",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Hotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CategoryGalery",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/CategoryGalery",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"CategoryGalery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CategoryGalery",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "category_galery_name",
+							"value": "WC",
+							"type": "text"
+						},
+						{
+							"key": "id_category_galery",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/CategoryGalery",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"CategoryGalery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CategoryGalery",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_category_galery",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/CategoryGalery",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"CategoryGalery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Galery",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Galery",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Galery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Galery",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_category_galery",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Pictures/37856288_1709790769074264_7301614385120673792_n.jpg"
+						},
+						{
+							"key": "id_galery",
+							"value": "7",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Galery",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Galery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Galery",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_galery",
+							"value": "7",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Galery",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Galery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Public TV",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/PublicTV",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"PublicTV"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Public TV",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "urutan",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "detik",
+							"value": "500",
+							"type": "text"
+						},
+						{
+							"key": "file_type",
+							"value": "png",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Pictures/Roblox/5ddbb31631b41e220db41b111a2eb318.jpg"
+						},
+						{
+							"key": "id_public_tv",
+							"value": "3",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/PublicTV",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"PublicTV"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Public TV",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_public_tv",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/PublicTV",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"PublicTV"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FoodCategory",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/FoodCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"FoodCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FoodCategory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "food_category",
+							"value": "Breakfast",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Pictures/69361289_785551491901853_7746985527628206170_n.jpg"
+						},
+						{
+							"key": "open_time",
+							"value": "07:00:00",
+							"type": "text"
+						},
+						{
+							"key": "close_time",
+							"value": "17:00:00",
+							"type": "text"
+						},
+						{
+							"key": "id_food_category",
+							"value": "5",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/FoodCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"FoodCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FoodCategory",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_food_category",
+							"value": "6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/FoodCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"FoodCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Food",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Food",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Food",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_food_category",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "food_name",
+							"value": "Spagetti",
+							"type": "text"
+						},
+						{
+							"key": "chef_name",
+							"value": "Alfonso The Mumbai",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "This is food from italia, delicious!",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "300000",
+							"type": "text"
+						},
+						{
+							"key": "qty",
+							"value": "200",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Pictures/Shirt roblox/61bb204784e96fb6dacffa95349e2bf3.png"
+						},
+						{
+							"key": "id_food",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Food",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Food",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_food",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Food",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Service",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Service",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Service"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Service",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "service_name",
+							"value": "Pijat Enak",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Pijatan Lembut dari tempat enak, harus coba!",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "150000",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Pictures/Lessons-Group-Icon_V2-01.png"
+						},
+						{
+							"key": "id_service",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Service",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Service"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Service",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_service",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Service",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Service"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FacilitiesCategory",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/FacilitiesCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"FacilitiesCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FacilitiesCategory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "category_facilities_name",
+							"value": "SPA",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/50550471-Grand Room - Hendro Edit-1.jpg"
+						},
+						{
+							"key": "id_facilities_category",
+							"value": "3",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/FacilitiesCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"FacilitiesCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FacilitiesCategory",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_facilities_category[]",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/FacilitiesCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"FacilitiesCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HotelFacilities",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/HotelFacilities",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"HotelFacilities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HotelFacilities",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_facilities_category",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "facilities_name",
+							"value": "Ayudan SPA Massage",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Dengan kenikmatan setiap jempol pengurut",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/Mayfair Suite Living Room-1.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/HotelFacilities",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"HotelFacilities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HotelFacilities",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_facilities",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/HotelFacilities",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"HotelFacilities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Information",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Information",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Information"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Information",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Welcome to our Hotel!! We give our best!",
+							"type": "text"
+						},
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/C:/Users/mrser/Desktop/Candahar/Project/Qnesis/Testing Image/Mayfair Suite Living Room-1.jpg"
+						},
+						{
+							"key": "id_information",
+							"value": "2",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Information",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Information"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Information",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_information[]",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Information",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Information"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Event",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Event",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "event_name",
+							"value": "Circus",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "It will be carnival on center of city",
+							"type": "text"
+						},
+						{
+							"key": "start_at",
+							"value": "2020-11-15",
+							"type": "text"
+						},
+						{
+							"key": "end_at",
+							"value": "2021-01-15",
+							"type": "text"
+						},
+						{
+							"key": "id_event",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Event",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Event",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_event",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Event",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Event"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SSID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/SSID",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"SSID"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SSID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "ssid",
+							"value": "Lantai 2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "root12345",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/SSID",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"SSID"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SSID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_ssid_hotel",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/SSID",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"SSID"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Room",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Room",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Room",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_room_category",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "no_room",
+							"value": "204",
+							"type": "text"
+						},
+						{
+							"key": "id_room",
+							"value": "9",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Room",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Room",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_room",
+							"value": "9",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/Room",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"Room"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RoomCategory",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/RoomCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"RoomCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RoomCategory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_hotel",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "room_type",
+							"value": "VIP",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "VP, for exclusive person yoo, like homies dude",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "1650000",
+							"type": "text"
+						},
+						{
+							"key": "id_room_category",
+							"value": "12",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/RoomCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"RoomCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RoomCategory",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_room_category",
+							"value": "13",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/RoomCategory",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"RoomCategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RoomHardware",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"select\":\"*\",\r\n    \"where\":\"\",\r\n    \"where_in\":\"\",\r\n    \"like\":\"\",\r\n    \"order\":\"\",\r\n    \"limit\":\"\",\r\n    \"offset\":\"\",\r\n    \"custom_condition\":\"\"\r\n}"
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/RoomHardware",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"RoomHardware"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RoomHardware",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_room",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "jenis_hardware",
+							"value": "LAMP",
+							"type": "text"
+						},
+						{
+							"key": "nama_hardware",
+							"value": "CENTER LAMP",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/RoomHardware",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"RoomHardware"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RoomHardware",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_room_hardware",
+							"value": "6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://candahar.com/SmartHotel/public/api/RoomHardware",
+					"host": [
+						"http://candahar.com"
+					],
+					"path": [
+						"SmartHotel",
+						"public",
+						"api",
+						"RoomHardware"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
