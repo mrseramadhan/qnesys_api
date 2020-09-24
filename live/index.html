@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>WebSockets - Simple chat</title>
+    <title>Websocket Smart Hotel</title>
     <style>
       * { font-family:tahoma; font-size:12px; padding:0px;margin:0px;}
       p { line-height:18px; }
@@ -16,10 +16,11 @@
       }
       #status { width:88px;display:block;float:left;margin-top:15px; }
     </style>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
     </script>
   </head>
-  <body>
+  <body style="background-size: cover; background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2134x1600/44237c0b29296aee2e302c0044fe436c/photo-1504639725590-34d0984388bd.jpg')">
+    <h1>Websocket Tester</h1>
     <center><span id="countdown" class="timer"></span></center>
 
     <div id="content" style="height: 500px;"></div>
@@ -84,10 +85,6 @@
           }));
         };  // most important part - incoming messages
         connection.onmessage = function (message) {
-          // try to parse JSON message. Because we know that the server
-          // always returns JSON this should work without any problem but
-          // we should make sure that the massage is not chunked or
-          // otherwise damaged.
           try {
             content.prepend(message.data+'<hr>');
             var res=JSON.parse(message.data);
@@ -95,53 +92,30 @@
             {
                 $('#loc_'+res.id_ads_location).html('<img src="'+"http://candahar.com/SmartHotel/public/assets/img/"+res.file+'" width="100px">');
             }
-            if()
-          } catch (e) {
+          }
+          catch (e) {
             console.log('Invalid JSON: ', message.data);
             return;
-          }    // NOTE: if you're not sure about the JSON structure
-        };  /**
-         * Send message when user presses Enter key
-         */
+          }
+        };
         input.keydown(function(e) {
           if (e.keyCode === 13) {
             var msg = $(this).val();
             if (!msg) {
               return;
             }
-            // send the message as an ordinary text
             connection.send(JSON.stringify({"type":"token","value":msg}));
             let countdown = setInterval('timer()', 1000);
-            //$(this).val('');
-            // disable the input field to make the user wait until server
-            // sends back response
             input.attr('disabled', 'disabled');      // we know that the first message sent from a user their name
-            if (myName === false) {
-              myName = msg;
-            }
           }
-        });  /**
-         * This method is optional. If the server wasn't able to
-         * respond to the in 3 seconds then show some error message
-         * to notify the user that something is wrong.
-         */
+        });
         setInterval(function() {
           if (connection.readyState !== 1) {
             status.text('Error');
             input.attr('disabled', 'disabled').val(
                 'Unable to communicate with the WebSocket server.');
           }
-        }, 3000);  /**
-         * Add message to the chat window
-         */
-        function addMessage(author, message, color, dt) {
-          content.prepend('<p><span style="color:' + color + '">'
-              + author + '</span> @ ' + (dt.getHours() < 10 ? '0'
-              + dt.getHours() : dt.getHours()) + ':'
-              + (dt.getMinutes() < 10
-                ? '0' + dt.getMinutes() : dt.getMinutes())
-              + ': ' + message + '</p>');
-        }
+        }, 3000);
       });
     </script>
     <script>
@@ -156,7 +130,6 @@
         var remainingSeconds = seconds % 60;
         function pad(n) {
           return (n < 10 ? "0" + n : n);
-
         }
         document.getElementById('countdown').innerHTML =pad(hours) + ":" + pad(minutes) + ":" + pad(remainingSeconds);
         if (seconds == 0) {
@@ -166,7 +139,6 @@
           seconds++;
         }
       }
-    //  var countdown = setInterval('timer()', 1000);
     </script>
   </body>
 </html>
