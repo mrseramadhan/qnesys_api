@@ -44,6 +44,14 @@
         <td id="loc_5"></td>
         <td id="loc_6"></td>
       </tr>
+      <tr>
+        <td>Notifikasi Tamu</td>
+        <td>Notifikasi Divisi Tamu</td>
+      </tr>
+      <tr>
+        <td id="guest"></td>
+        <td id="divisi"></td>
+      </tr>
     </table>
     <script>
       $(document).ready(function(){
@@ -87,6 +95,7 @@
             {
                 $('#loc_'+res.id_ads_location).html('<img src="'+"http://candahar.com/SmartHotel/public/assets/img/"+res.file+'" width="100px">');
             }
+            if()
           } catch (e) {
             console.log('Invalid JSON: ', message.data);
             return;

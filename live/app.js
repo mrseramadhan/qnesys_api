@@ -122,13 +122,22 @@ function start_server()
     var index = clients.push(connection) - 1;
     var userName = false;
     var userColor = false;  console.log((new Date()) + ' Connection accepted.');  // send back chat history
+
     var thread_guest_access;
     var thread_guest_cart;
     var thread_guest_cart_checkout;
     var thread_division_notification;
     var thread_ads;
-    var thread_room_status;
+    var thread_room_status = {};
+
+    var last_update_guest_access;
+    var last_update_guest_cart;
+    var last_update_guest_cart_checkout;
+    var last_update_division_notification;
+    var last_update_ads;
+    var last_update_room_status = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     var table_status=["tr_status_ac","tr_status_clean_my_room","tr_status_dnd","tr_status_light","tr_status_smart_lock","tr_status_tv"];
+    var notif_status=["status_ac","status_clean_my_room","status_dnd","status_light","status_smart_lock","status_tv"]
     var status_label=["AC","Clean My Room","Status DND","Status Light","Smart Lock","TV"];
 
     if (history.length > 0) {
@@ -170,17 +179,16 @@ function start_server()
                           hours = date.getHours();
                           minutes = date.getMinutes();
                           seconds = date.getSeconds();
-                          last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                          function Interval_Division_Notification_Pusher(id_user,last_update){
+                          last_update_division_notification = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          function Interval_Division_Notification_Pusher(id_user,last_update_division_notification){
                             try{
-                              db.query("SELECT b.id_guest, b.last_name_used, b.last_phone_used, c.id_order, c.id_service, d.service_name, d.price AS service_price, c.id_food, e.food_name, e.price AS food_price, c.qty AS order_qty, c.total_price, c.discount, f.no_room, f.lantai FROM tr_cart a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN dt_cart_item c ON c.id_cart = a.id_cart LEFT JOIN ms_service d ON c.id_service = d.id_service LEFT JOIN ms_food e ON e.id_food = c.id_food LEFT JOIN ms_room f ON f.id_room = b.id_room LEFT JOIN ms_category_food h ON e.id_food_category = h.id_food_category LEFT JOIN ms_user g ON (g.id_division = d.id_division) OR (e.id_food IS NOT NULL AND b.id_hotel = h.id_hotel) WHERE a.is_done = 1 AND a.active = 1 AND b.datetime_checkout IS NULL AND a.updated_at >= '" + last_update + "' AND g.id_user = '" + result_object.data[0].id_user + "'").then(
+                              db.query("SELECT b.id_guest, b.last_name_used, b.last_phone_used, c.id_order, c.id_service, d.service_name, d.price AS service_price, c.id_food, e.food_name, e.price AS food_price, c.qty AS order_qty, c.total_price, c.discount, f.no_room, f.lantai FROM tr_cart a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN dt_cart_item c ON c.id_cart = a.id_cart LEFT JOIN ms_service d ON c.id_service = d.id_service LEFT JOIN ms_food e ON e.id_food = c.id_food LEFT JOIN ms_room f ON f.id_room = b.id_room LEFT JOIN ms_category_food h ON e.id_food_category = h.id_food_category LEFT JOIN ms_user g ON (g.id_division = d.id_division) OR (e.id_food IS NOT NULL AND b.id_hotel = h.id_hotel) WHERE a.is_done = 1 AND a.active = 1 AND b.datetime_checkout IS NULL AND a.updated_at >= '" + last_update_division_notification + "' AND g.id_user = '" + result_object.data[0].id_user + "'").then(
                                 result => {
-                                  console.log(result);
                                   try{
                                     if(result.length > 0)
                                     {
                                       var data_send = {};
-                                      data_send['type'] = "notification";
+                                      data_send['type'] = "notification_division";
                                       data_send['data_service'] = [];
                                       data_send['data_food'] = [];
                                       for(var index=0; result.length>index; index++)
@@ -193,7 +201,6 @@ function start_server()
                                         {
                                           data_send['data_food'].push(result[index]);
                                         }
-                                        console.log(result[index]);
                                       }
                                       connection.sendUTF(JSON.stringify(data_send));
                                       thread_division_notification = setTimeout(function(){
@@ -204,14 +211,14 @@ function start_server()
                                         hours = date.getHours();
                                         minutes = date.getMinutes();
                                         seconds = date.getSeconds();
-                                        last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                                        Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update);
+                                        last_update_division_notification = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                                        Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update_division_notification);
                                       },guest_thread_interval);
                                     }
                                     else
                                     {
                                       thread_division_notification = setTimeout(function(){
-                                        Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update);
+                                        Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update_division_notification);
                                       },guest_thread_interval);
                                     }
                                   }
@@ -226,11 +233,11 @@ function start_server()
                             catch(err)
                             {
                               thread_division_notification = setTimeout(function(){
-                                Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update);
+                                Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update_division_notification);
                               },10000);
                             }
                           }
-                          Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update);
+                          Interval_Division_Notification_Pusher(result_object.data[0].id_user,last_update_division_notification);
                         }
                         //JIKA TOKEN USER TAMU
                         else if(result_object.data[0].id_guest!='')
@@ -243,16 +250,17 @@ function start_server()
                           var hours = date.getHours();
                           var minutes = date.getMinutes();
                           var seconds = date.getSeconds();
-                          var last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                          function Interval_Guest_Access_Pusher(id_guest,last_update){
+                          var last_update_guest_access = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+
+                          function Interval_Guest_Access_Pusher(id_guest,last_update_guest_access){
                             try{
-                              db.query("SELECT b.id_check_io, a.id_guest, b.id_room, a.active, b.id_hotel, IF(a.active = 1,CONCAT(c.guest_name,' Grant', ' Access'), CONCAT(c.guest_name,' Revoke', ' Access')) as message FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest  WHERE b.datetime_checkout IS NULL AND b.id_guest = '"+result_object.data[0].id_guest+"' AND a.updated_at >= '"+last_update+"'").then(
+                              db.query("SELECT b.id_check_io, a.id_guest, b.id_room, a.active, b.id_hotel, IF(a.active = 1,CONCAT(c.guest_name,' Grant', ' Access'), CONCAT(c.guest_name,' Revoke', ' Access')) as message FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest  WHERE b.datetime_checkout IS NULL AND b.id_guest = '"+result_object.data[0].id_guest+"' AND a.updated_at >= '"+last_update_guest_access+"'").then(
                                 result => {
                                   try{
                                     if(result.length > 0)
                                     {
                                       var data_send = {};
-                                      data_send['type'] = "guest_access";
+                                      data_send['type'] = "notification_guest_access";
                                       data_send['data'] = result;
                                       connection.sendUTF(JSON.stringify(data_send));
                                       thread_guest_access = setTimeout(function(){
@@ -263,21 +271,21 @@ function start_server()
                                         hours = date.getHours();
                                         minutes = date.getMinutes();
                                         seconds = date.getSeconds();
-                                        last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                                        Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update);
+                                        last_update_guest_access = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                                        Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update_guest_access);
                                       },guest_thread_interval);
                                     }
                                     else
                                     {
                                       thread_guest_access = setTimeout(function(){
-                                        Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update);
+                                        Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update_guest_access);
                                       },guest_thread_interval);
                                     }
                                   }
                                   catch(err)
                                   {
                                     thread_guest_access = setTimeout(function(){
-                                      Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update);
+                                      Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update_guest_access);
                                     },10000);
                                   }
                                 }
@@ -286,15 +294,16 @@ function start_server()
                             catch(err)
                             {
                               thread_guest_access = setTimeout(function(){
-                                Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update);
+                                Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update_guest_access);
                               },10000);
                             }
                           }
-                          Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update);
+                          Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update_guest_access);
 
-                          function Interval_Guest_Cart_Pusher(id_guest,last_update){
+                          last_update_guest_cart = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          function Interval_Guest_Cart_Pusher(id_guest,last_update_guest_cart){
                             try{
-                              db.query("SELECT b.id_check_io, d.id_cart, e.id_cart_item, e.id_service, f.service_name, f.price as service_price, g.id_food, g.food_name, g.price as food_price, e.qty, e.total_price, e.discount FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest  LEFT JOIN tr_cart d ON b.id_check_io = d.id_check_io LEFT JOIN dt_cart_item e ON e.id_cart = e.id_cart LEFT JOIN ms_service f ON f.id_service = e.id_service LEFT JOIN ms_food g ON e.id_food = g.id_food WHERE b.datetime_checkout IS NULL AND d.active = 1 AND d.is_done = 0 AND a.id_guest = '"+result_object.data[0].id_guest+"' AND e.updated_at >= '"+last_update+"'").then(
+                              db.query("SELECT b.id_check_io, d.id_cart, e.id_cart_item, e.id_service, f.service_name, f.price as service_price, g.id_food, g.food_name, g.price as food_price, e.qty, e.total_price, e.discount FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest  LEFT JOIN tr_cart d ON b.id_check_io = d.id_check_io LEFT JOIN dt_cart_item e ON e.id_cart = e.id_cart LEFT JOIN ms_service f ON f.id_service = e.id_service LEFT JOIN ms_food g ON e.id_food = g.id_food WHERE b.datetime_checkout IS NULL AND d.active = 1 AND d.is_done = 0 AND a.id_guest = '"+result_object.data[0].id_guest+"' AND e.updated_at >= '"+last_update_guest_cart+"'").then(
                                 result => {
                                     try{
                                       if(result.length>0)
@@ -302,9 +311,9 @@ function start_server()
                                         db.query("SELECT a.id_check_io, b.id_cart, 'Cart item updated' as message FROM tr_check_io a LEFT JOIN tr_cart b ON a.id_check_io = b.id_check_io WHERE a.id_check_io = '" +result[0].id_check_io+ "' AND b.id_cart = '" +result[0].id_cart+ "'").then(
                                           result_head => {
                                             var data_send = {};
-                                            data_send['type'] = "guest_cart";
-                                            data_send['cart'] = result_head;
-                                            data_send['cart_item'] = result;
+                                            data_send['type'] = "notification_guest_cart";
+                                            data_send['data_cart'] = result_head;
+                                            data_send['data_cart_item'] = result;
                                             connection.sendUTF(JSON.stringify(data_send));
                                             thread_guest_cart = setTimeout(function(){
                                               date = new Date();
@@ -314,8 +323,8 @@ function start_server()
                                               hours = date.getHours();
                                               minutes = date.getMinutes();
                                               seconds = date.getSeconds();
-                                              last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                                              Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update);
+                                              last_update_guest_cart = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                                              Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update_guest_cart);
                                             },guest_thread_interval);
                                           }
                                         )
@@ -323,14 +332,14 @@ function start_server()
                                       else
                                       {
                                         thread_guest_cart = setTimeout(function(){
-                                          Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update);
+                                          Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update_guest_cart);
                                         },guest_thread_interval);
                                       }
                                     }
                                     catch(err)
                                     {
                                       thread_guest_cart = setTimeout(function(){
-                                        Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update);
+                                        Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update_guest_cart);
                                       },10000);
                                     }
                                 }
@@ -339,15 +348,16 @@ function start_server()
                             catch(err)
                             {
                               thread_guest_cart = setTimeout(function(){
-                                Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update);
+                                Interval_Guest_Access_Pusher(result_object.data[0].id_guest,last_update_guest_cart);
                               },10000);
                             }
                           }
-                          Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update);
+                          Interval_Guest_Cart_Pusher(result_object.data[0].id_guest,last_update_guest_cart);
 
-                          function Interval_Guest_Cart_Checkout_Pusher(id_guest,last_update){
+                          last_update_guest_cart_checkout = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          function Interval_Guest_Cart_Checkout_Pusher(id_guest,last_update_guest_cart_checkout){
                             try{
-                              db.query("SELECT b.id_check_io, d.id_cart, 'Cart has been checkout' as message FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest  LEFT JOIN tr_cart d ON b.id_check_io = d.id_check_io WHERE b.datetime_checkout IS NULL AND d.active = 1 AND d.is_done = 1 AND a.id_guest = '"+result_object.data[0].id_guest+"' AND d.updated_at >= '"+last_update+"'").then(
+                              db.query("SELECT b.id_check_io, d.id_cart, 'Cart has been checkout' as message FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest  LEFT JOIN tr_cart d ON b.id_check_io = d.id_check_io WHERE b.datetime_checkout IS NULL AND d.active = 1 AND d.is_done = 1 AND a.id_guest = '"+result_object.data[0].id_guest+"' AND d.updated_at >= '"+last_update_guest_cart_checkout+"'").then(
                                 result => {
                                     try{
                                       if(result.length>0)
@@ -355,8 +365,8 @@ function start_server()
                                         db.query("SELECT a.id_check_io, b.id_cart, 'Cart item updated' as message FROM tr_check_io a LEFT JOIN tr_cart b ON a.id_check_io = b.id_check_io WHERE a.id_check_io = '" +result[0].id_check_io+ "' AND b.id_cart = '" +result[0].id_cart+ "'").then(
                                           result_head => {
                                             var data_send = {};
-                                            data_send['type'] = "guest_cart";
-                                            data_send['cart'] = result;
+                                            data_send['type'] = "notification_guest_cart";
+                                            data_send['data_cart'] = result;
                                             connection.sendUTF(JSON.stringify(data_send));
                                             thread_guest_cart_checkout = setTimeout(function(){
                                               date = new Date();
@@ -366,8 +376,8 @@ function start_server()
                                               hours = date.getHours();
                                               minutes = date.getMinutes();
                                               seconds = date.getSeconds();
-                                              last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                                              Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update);
+                                              last_update_guest_cart_checkout = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                                              Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update_guest_cart_checkout);
                                             },guest_thread_interval);
                                           }
                                         )
@@ -375,14 +385,14 @@ function start_server()
                                       else
                                       {
                                         thread_guest_cart_checkout = setTimeout(function(){
-                                          Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update);
+                                          Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update_guest_cart_checkout);
                                         },guest_thread_interval);
                                       }
                                     }
                                     catch(err)
                                     {
                                       thread_guest_cart_checkout = setTimeout(function(){
-                                        Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update);
+                                        Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update_guest_cart_checkout);
                                       },10000);
                                     }
                                 }
@@ -391,22 +401,22 @@ function start_server()
                             catch(err)
                             {
                               thread_guest_cart_checkout = setTimeout(function(){
-                                Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update);
+                                Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update_guest_cart_checkout);
                               },10000);
                             }
                           }
-                          Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update);
+                          Interval_Guest_Cart_Checkout_Pusher(result_object.data[0].id_guest,last_update_guest_cart_checkout);
 
-                          function Interval_Guest_Room_Status_Pusher(id_guest,last_update,index){
+                          function Interval_Guest_Room_Status_Pusher(id_guest,last_update_room_status_func,index){
                             try{
-                              db.query("SELECT b.id_check_io, a.id_guest, b.id_room, b.id_hotel, IF(d.status=1,CONCAT(c.guest_name,' Turn On ', ' " + status_label[index] + "'), CONCAT(c.guest_name,' Turn Off ', ' " + status_label[index] + "')) message FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest LEFT JOIN " + table_status[index] + " d ON d.id_room = b.id_room WHERE b.datetime_checkout IS NULL AND a.id_guest = '" + result_object.data[0].id_guest + "' AND d.updated_at >= '" + last_update + "'").then(
+                              db.query("SELECT b.id_check_io, a.id_guest, b.id_room, b.id_hotel, IF(d.status=1,CONCAT(c.guest_name,' Turn On ', ' " + status_label[index] + "'), CONCAT(c.guest_name,' Turn Off ', ' " + status_label[index] + "')) message FROM dt_check_io_access a LEFT JOIN tr_check_io b ON a.id_check_io = b.id_check_io LEFT JOIN ms_guest c ON a.id_guest = c.id_guest LEFT JOIN " + table_status[index] + " d ON d.id_room = b.id_room WHERE b.datetime_checkout IS NULL AND a.id_guest = '" + result_object.data[0].id_guest + "' AND d.updated_at >= '" + last_update_room_status_func + "'").then(
                                 result => {
                                   try{
                                     if(result.length > 0)
                                     {
                                       var data_send = {};
-                                      data_send['type'] = table_status[index];
-                                      data_send['data'] = result;
+                                      data_send['type'] = notif_status[index];
+                                      data_send['data_status'] = result;
                                       connection.sendUTF(JSON.stringify(data_send));
                                       thread_room_status[table_status[index]] = setTimeout(function(){
                                         date = new Date();
@@ -416,21 +426,21 @@ function start_server()
                                         hours = date.getHours();
                                         minutes = date.getMinutes();
                                         seconds = date.getSeconds();
-                                        last_update = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                                        Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,index);
+                                        last_update_room_status[index] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                                        Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[index],index);
                                       },guest_thread_interval);
                                     }
                                     else
                                     {
                                       thread_room_status[table_status[index]] = setTimeout(function(){
-                                        Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,index);
+                                        Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status_func,index);
                                       },guest_thread_interval);
                                     }
                                   }
                                   catch(err)
                                   {
                                     thread_room_status[table_status[index]] = setTimeout(function(){
-                                      Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,index);
+                                      Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status_func,index);
                                     },10000);
                                   }
                                 }
@@ -439,17 +449,22 @@ function start_server()
                             catch(err)
                             {
                               thread_room_status[table_status[index]] = setTimeout(function(){
-                                Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,index);
+                                Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status_func,index);
                               },10000);
                             }
                           }
-
-                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,0);
-                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,1);
-                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,2);
-                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,3);
-                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,4);
-                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update,5);
+                          last_update_room_status[0] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          last_update_room_status[1] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          last_update_room_status[2] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          last_update_room_status[3] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          last_update_room_status[4] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          last_update_room_status[5] = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[0],0);
+                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[1],1);
+                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[2],2);
+                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[3],3);
+                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[4],4);
+                          Interval_Guest_Room_Status_Pusher(result_object.data[0].id_guest,last_update_room_status[5],5);
 
                         }
                         //JIKA TOKEN IPTV
