@@ -19,7 +19,12 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
+        "core-util-is": "^1.0.2",
+        "mysql": "^2.18.1",
+        "prompt": "^1.0.0",
         "redis": "^3.0.2",
-        "socket.io-client": "^2.3.0"
+        "socket.io-client": "^2.3.0",
+        "webpack-dev-server": "^3.11.0",
+        "websocket": "^1.0.32"
     }
 }

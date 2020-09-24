@@ -26,13 +26,13 @@ exports.request_api = async (url, data, token='') => {
       catch(error)
       {
           response_api = JSON.stringify({"message":"error syntax"});
-          console.log(error);
+          console.log('Request Interupt');
       }
 
     })
     .catch(error => {
       response_api = JSON.stringify({"message":"error syntax"});
-      console.log(error);
+      console.log('Connection Interupt');
   });
   return response_api;
 }

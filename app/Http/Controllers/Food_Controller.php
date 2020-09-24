@@ -40,7 +40,7 @@ class Food_Controller extends Controller
     if($check_result->accept)
     {
         $select=explode(',',str_replace(" ","",$request_body->select));
-        $query=Ms_Food::select('ms_food.*','ms_category_food.id_food_category','ms_category_food.food_category')->join('ms_category_food','ms_category_food.id_food_category', '=', 'ms_food.id_food_category');
+        $query=Ms_Food::select($select)->join('ms_category_food','ms_category_food.id_food_category', '=', 'ms_food.id_food_category');
 
         if(empty($request_body->custom_condition)){
             if(is_array($request_body->where))

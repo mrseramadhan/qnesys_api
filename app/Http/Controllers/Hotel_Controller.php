@@ -351,9 +351,9 @@ class Hotel_Controller extends Controller
                 'npwp'                => $request_body->npwp,
                 'pkp_npkp'            => $request_body->pkp_npkp,
                 'map_coordinate'      => $request_body->map_coordinate,
-                'pict_map'            => $pic_map->getClientOriginalName(),
-                'logo_hotel'          => $pic_logo_hotel->getClientOriginalName(),
-                'wallpaper'           => $pic_wallpaper->getClientOriginalName(),
+                'pict_map'            => $move_pic_map,
+                'logo_hotel'          => $move_pic_logo_hotel,
+                'wallpaper'           => $move_pic_wallpaper,
               ]);
 
               if($result)
