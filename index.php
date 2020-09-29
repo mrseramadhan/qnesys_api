@@ -934,7 +934,7 @@ Example API-Token Missmatch (403)
                                         <div class="col-md-4">
                                           <b>Configuration</b><hr>
                                           <span>Websocket Address</span>
-                                          <input type="text" id="address" class="form-control" disabled="disabled" value="ws://127.0.0.1:1337"/>
+                                          <input type="text" id="address" class="form-control" value="ws://127.0.0.1:1337"/>
                                           <button id="set_button" onclick="set_ws_address();" class="btn btn-primary btn-block">SET ADDRESS</button>
                                           <hr>
                                           <span id="status">Connecting...</span><b>TEKAN ENTER</b>
