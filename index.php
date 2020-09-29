@@ -42,7 +42,12 @@ http://www.templatemo.com/tm-501-neaty
                                     <a href="#welcome" class="tm-nav-item-link">Selamat Datang</a>
                                     <hr style="background-color: white;">
                                 </li>
-
+                                <li class="tm-nav-item">
+                                    <a href="#update30092020" class="tm-nav-item-link">UPDATE 30092020</a>
+                                </li>
+                                <li class="tm-nav-item">
+                                    <a href="#update25092020" class="tm-nav-item-link">UPDATE 25092020</a>
+                                </li>
                                 <li class="tm-nav-item">
                                     <a href="#update07092020" class="tm-nav-item-link">UPDATE 07092020</a>
                                 </li>
@@ -73,7 +78,14 @@ http://www.templatemo.com/tm-501-neaty
                                     <hr style="background-color: white;">
                                 </li>
                                 <li class="tm-nav-item">
+                                    <a href="#websocket" class="tm-nav-item-link">WEBSOCKET</a>
+                                    <hr style="background-color: white;">
+                                </li>
+                                <li class="tm-nav-item">
                                     <a href="#login" class="tm-nav-item-link">Login</a>
+                                </li>
+                                <li class="tm-nav-item">
+                                    <a href="#loginiptv" class="tm-nav-item-link">Token IPTV</a>
                                 </li>
                                 <li class="tm-nav-item">
                                     <a href="#division" class="tm-nav-item-link">Division</a>
@@ -259,27 +271,6 @@ http://www.templatemo.com/tm-501-neaty
                                   'processData': true,
                                   'contentType': 'text/plain',//'application/json' //typically 'application/x-www-form-urlencoded', but the service you are calling may expect 'text/json'... check with the service to see what they expect as content-type in the HTTP header
                               });
-
-//                               var xhr = new XMLHttpRequest();
-// xhr.open('GET', 'http://candahar.com/SmartHotel/public/api/Provinsi', true);
-// xhr.withCredentials = true;
-// xhr.setRequestHeader('Content-Type', 'application/json')
-// xhr.send({
-//      "select":"*",
-//      "where":"",
-//      "where_in":"",
-//      "like":"",
-//      "order":"",
-//      "limit":"",
-//      "offset":"",
-//      "custom_condition":""
-// });
-
-// xhr.onreadystatechange = function() {
-// if (xhr.readyState === 2) {// do something}
-// }
-//
-// }
                               </script>
                             </section>
                             <section id="welcome" class="tm-section">
@@ -289,7 +280,35 @@ http://www.templatemo.com/tm-501-neaty
                                 <div class="row">
                                   <div class="well col-md-12">
                                     <p>Selamat datang di dokumentasi Smart Hotel API untuk mengambil collection postman silahkan klik link dibawah ini, untuk melihat dokumentasi API pilih sidebar sesuai kebutuhan</p>
-                                    <center><h3 class="text-center"><a download="smart_hotel.postman_collection.json" href="smart_hotel.postman_collection.json">POSTMAN COLLECTION</a></h3></center>
+                                  </div>
+                                </div>
+                            </section>
+                            <section id="update30092020" class="tm-section">
+                                <header>
+                                    <h2 class="tm-blue-text tm-welcome-title tm-margin-b-45">Update 30-09-2020</h2>
+                                </header>
+                                <div class="row">
+                                  <div class="col col-md-12">
+                                      <ul>
+                                        <li>Penambahan field username dan password di API GUEST</li>
+                                        <li>Perubahan metode login tamu menjadi username dan password</li>
+                                        <li>Pengambilan token iptv melalui API LoginIptv</li>
+                                      </ul>
+                                  </div>
+                                </div>
+                            </section>
+                            <section id="update25092020" class="tm-section">
+                                <header>
+                                    <h2 class="tm-blue-text tm-welcome-title tm-margin-b-45">Update 25-09-2020</h2>
+                                </header>
+                                <div class="row">
+                                  <div class="col col-md-12">
+                                      <ul>
+                                        <li>Peluncuran Service Notifikasi Websocket</li>
+                                        <li>Penambahan Websocket Guest <br>(Sharing Cart, Sharing Room Access, Room Control)</li>
+                                        <li>Penambahan Websocket Division (Notifikasi saat Guest Order)</li>
+                                        <li>Penambahan Websocket IPTV (Slide)</li>
+                                      </ul>
                                   </div>
                                 </div>
                             </section>
@@ -368,9 +387,9 @@ http://www.templatemo.com/tm-501-neaty
                                 </header>
                                 <div class="row">
                                   <div class="col col-md-12">
-                                    <img style="filter: blur(10px);" src="img/Untitled.png" width="100%">
-                                    <!-- <center><p>*simpan gambar lalu zoom untuk melihat lebih jelasnya</p></center> -->
-                                    <center><p>We Currently update for this structure</p></center>
+                                    <img src="img/Diagram.png" width="100%">
+                                    <center><p>*simpan gambar lalu zoom untuk melihat lebih jelasnya</p></center>
+                                    <!-- <center><p>We Currently update for this structure</p></center> -->
                                   </div>
                                 </div>
                             </section>
@@ -871,6 +890,219 @@ Example API-Token Missmatch (403)
                                     </div>
                                 </div>
                             </section>
+                            <section id="websocket" class="tm-section">
+                                <header>
+                                    <h2 class="tm-blue-text tm-welcome-title tm-margin-b-45">WEBSOCKET</h2>
+                                </header>
+                                <div class="row">
+                                    <div class="card" style="padding: 20px;">
+                                      <p>
+                                        <div class="card bg-primary" style="color: white; padding: 20px;">
+                                        1. Token IPTV: Melakukan push ads ke client (iptv)
+                                        </div>
+                                          <hr><b>CONTOH DATA PUSH ADS</b><hr>
+                                            {"id_ads_trx":"23","id_ads_location":"4","id_master_ads":"6","range_time":"5000","created_at":"2020-09-18 16:53:27","updated_at":"2020-09-07 12:26:33","id_hotel":"2","nama_produk":"RESTORANT UENAK","file":"FOOD_14092020085330.jpg","active":"1","ads_location":"Posisi Kiri"}
+                                          <hr>
+                                        <div class="card bg-primary" style="color: white; padding: 20px;">
+                                        2. Token Tamu: Melakukan push notifikasi akses kamar (ke penanggung jawab check in), live control status hardware, live cart and close cart
+                                        </div>
+                                          <hr><b>CONTOH DATA PUSH LIVE ROOM ACCESS</b><hr>
+                                          {"type":"notification_guest_access","data":[{"id_check_io":15,"id_guest":4,"id_room":6,"active":1,"id_hotel":2,"message":"Septian Ramadhan Grant Access"}]}
+                                          <hr><b>CONTOH DATA PUSH LIVE CONTROL HARDWARE</b><hr>
+                                          {"type":"status_ac","data_status":[{"id_check_io":15,"id_guest":4,"id_room":6,"id_hotel":2,"message":"Septian Ramadhan Turn Off AC"}]}
+                                          <hr><b>CONTOH DATA PUSH LIVE CART ITEM</b><hr>
+                                          {"type":"notification_guest_cart","data_cart":[{"id_check_io":15,"id_cart":2,"message":"Cart item updated"}],"data_cart_item":[{"id_check_io":15,"id_cart":2,"id_cart_item":23,"id_service":null,"service_name":null,"service_price":null,"id_food":24,"food_name":"Sosis","food_price":100000,"qty":1,"total_price":1000,"discount":null}]}
+                                          <hr><b>CONTOH DATA PUSH LIVE CART CHECKOUT</b><hr>
+                                          {"type":"notification_guest_cart","data_cart":[{"id_check_io":15,"id_cart":2,"message":"Cart has been checkout"}]}
+                                          <hr>
+                                        <div class="card bg-primary" style="color: white; padding: 20px;">
+                                        3. Token Divisi: Melakukan push notifikasi saat tamu melakukan check out pada cart
+                                        </div>
+                                        <hr><b>CONTOH DATA PUSH NOTIFIKASI ORDER</b><hr>
+                                        {"type":"notification_division","data_service":[{"id_guest":4,"last_name_used":"Septian Ramadhan","last_phone_used":"08995716304","id_order":"1","id_service":2,"service_name":"Pijat Enak","service_price":200000,"id_food":null,"food_name":null,"food_price":null,"order_qty":5,"total_price":10000,"discount":1000,"no_room":201,"lantai":""}],"data_food":[{"id_guest":4,"last_name_used":"Septian Ramadhan","last_phone_used":"08995716304","id_order":"EL-2020-DORADO","id_service":null,"service_name":null,"service_price":null,"id_food":19,"food_name":"Confit de Canard","food_price":100000,"order_qty":1,"total_price":10000,"discount":10000,"no_room":201,"lantai":""},{"id_guest":4,"last_name_used":"Septian Ramadhan","last_phone_used":"08995716304","id_order":"123123123","id_service":null,"service_name":null,"service_price":null,"id_food":24,"food_name":"Sosis","food_price":100000,"order_qty":1,"total_price":1000,"discount":null,"no_room":201,"lantai":""}]}
+                                      </p>
+                                      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                                      <center><span id="countdown" class="timer"></span></center>
+                                      <div class="row">
+                                        <div class="col-md-8">
+                                          <center><b>DATA STREAM</b></center>
+                                          <hr>
+                                          <b>
+                                            <div id="content" style="height: 500px; width: 100%; overflow-y: scroll; overflow-x: scroll; background-color: #006599; color: white;"></div>
+                                          </b>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <b>Configuration</b><hr>
+                                          <span>Websocket Address</span>
+                                          <input type="text" id="address" class="form-control" disabled="disabled" value="ws://127.0.0.1:1337"/>
+                                          <button id="set_button" onclick="set_ws_address();" class="btn btn-primary btn-block">SET ADDRESS</button>
+                                          <hr>
+                                          <span id="status">Connecting...</span><b>TEKAN ENTER</b>
+                                          <input type="text" id="input" class="form-control" disabled="disabled"/>
+                                          <hr>
+                                          [Live Streamdata Tamu]: <span id="tamu_stream" class="btn btn-success">0</span>
+                                          <hr>
+                                          [Live Streamdata Divisi]: <span id="divisi_stream" class="btn btn-success">0</span>
+                                        </div>
+                                      </div>
+                                      <div style="width: 100%; height: 500px; background-color: black; border: solid gray 20px; ">
+                                        <center>
+                                          <table width="100%" style="margin-left:auto; margin-right:auto; border: 1px solid black">
+                                            <tr>
+                                              <td ><center><b style="color: white;">Preview</b></center></td>
+                                              <td ><center><b style="color: white;">Sebelum</b></center></td>
+                                              <td ><center><b style="color: white;">Posisi Bawah</b></center></td>
+                                            </tr>
+                                            <tr>
+                                              <td width="33%" height="175px" id="loc_1"></td>
+                                              <td width="33%" height="175px" id="loc_2"></td>
+                                              <td width="33%" height="175px" id="loc_3"></td>
+                                            </tr>
+                                            <tr>
+                                              <td><center><b style="color: white;">Posisi Kiri</b></center></td>
+                                              <td><center><b style="color: white;">Dashboard Corner Bar</b></center></td>
+                                              <td><center><b style="color: white;">Inside Dashboard Corner Bar</b></center></td>
+                                            </tr>
+                                            <tr>
+                                              <td width="33%" height="175px" id="loc_4"></td>
+                                              <td width="33%" height="175px" id="loc_5"></td>
+                                              <td width="33%" height="175px" id="loc_6"></td>
+                                            </tr>
+                                          </table>
+                                        </center>
+                                      </div>
+
+                                      <script>
+                                        $(document).ready(function(){
+
+                                        });
+                                        let notif_tamu = 0;
+                                        let notif_divisi = 0;
+                                        function set_ws_address()
+                                        {
+                                          "use strict";
+                                          var content = $('#content');
+                                          var input = $('#input');
+                                          var status = $('#status');
+                                          window.WebSocket = window.WebSocket || window.MozWebSocket;
+                                          if (!window.WebSocket) {
+                                            content.html($('<p>',
+                                              { text:'Sorry, but your browser doesn\'t support WebSocket.'}
+                                            ));
+                                            input.hide();
+                                            $('span').hide();
+                                            return;
+                                          }
+
+                                          var connection = new WebSocket($('#address').val());  connection.onopen = function () {
+                                            input.removeAttr('disabled');
+                                            status.text('API-Token: ');
+                                          };  connection.onerror = function (error) {
+                                            content.html($('<p>', {
+                                              text: 'Sorry, but there\'s some problem with your '
+                                                 + 'connection or the server is down.'
+                                            }));
+                                          };
+                                          connection.onmessage = function (message) {
+                                            try {
+                                              content.prepend(message.data+'<hr>');
+                                              var res=JSON.parse(message.data);
+                                              if(res.id_ads_location)
+                                              {
+                                                  $('#loc_'+res.id_ads_location).html('<img src="'+"http://candahar.com/SmartHotel/public/assets/img/"+res.file+'" width="100%" height="175px">');
+                                              }
+                                              if(res.type)
+                                              {
+                                                if(res.type=='notification_division')
+                                                {
+                                                  $('#divisi_stream').html(++notif_divisi);
+                                                }
+                                                if(res.type=='notification_guest_access')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='notification_guest_cart')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='status_ac')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='status_clean_my_room')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='status_dnd')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='status_light')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='status_smart_lock')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                                if(res.type=='status_tv')
+                                                {
+                                                  $('#tamu_stream').html(++notif_tamu);
+                                                }
+                                              }
+                                            }
+                                            catch (e) {
+                                              console.log('Invalid JSON: ', message.data);
+                                              return;
+                                            }
+                                          };
+
+                                          input.keydown(function(e) {
+                                            if (e.keyCode === 13) {
+                                              var msg = $(this).val();
+                                              if (!msg) {
+                                                return;
+                                              }
+                                              connection.send(JSON.stringify({"type":"token","value":msg}));
+                                              let countdown = setInterval('timer()', 1000);
+                                              input.attr('disabled', 'disabled');      // we know that the first message sent from a user their name
+                                            }
+                                          });
+
+                                          setInterval(function() {
+                                            if (connection.readyState !== 1) {
+                                              status.text('Error');
+                                              input.attr('disabled', 'disabled').val(
+                                                  'Unable to communicate with the WebSocket server.');
+                                            }
+                                          }, 3000);
+                                        }
+                                      </script>
+                                      <script>
+                                        var upgradeTime = 1;
+                                        var seconds = upgradeTime;
+                                        function timer() {
+                                          var days        = Math.floor(seconds/24/60/60);
+                                          var hoursLeft  = Math.floor((seconds) - (days*86400));
+                                          var hours      = Math.floor(hoursLeft/3600);
+                                          var minutesLeft = Math.floor((hoursLeft) - (hours*3600));
+                                          var minutes    = Math.floor(minutesLeft/60);
+                                          var remainingSeconds = seconds % 60;
+                                          function pad(n) {
+                                            return (n < 10 ? "0" + n : n);
+                                          }
+                                          document.getElementById('countdown').innerHTML =pad(hours) + ":" + pad(minutes) + ":" + pad(remainingSeconds);
+                                          if (seconds == 0) {
+                                            clearInterval(countdownTimer);
+                                            document.getElementById('countdown').innerHTML = "Completed";
+                                          } else {
+                                            seconds++;
+                                          }
+                                        }
+                                      </script>
+                                    </div>
+                                </div>
+                            </section>
                             <section id="login" class="tm-section">
                                 <header>
                                     <h2 class="tm-blue-text tm-welcome-title tm-margin-b-45">Login</h2>
@@ -879,7 +1111,7 @@ Example API-Token Missmatch (403)
                                   <div class="col-md-12">
                                     <div class="card" style="padding: 20px;">
                                       <b class="btn btn-success">POST</b> <strong><?=$DOMAIN?>/api/Login</strong>
-                                      <p>Digunakan untuk mengambil token, untuk penguna internal atau pengelola data mengunakan username dan password, untuk tamu mengunakan id_guest dan id_check_io_access</p>
+                                      <p>Digunakan untuk mengambil token, untuk userhotel dan tamu mengunakan username dan password</p>
                                       <hr>
                                         <h4>Request Header: </h4>
                                         <hr>
@@ -931,9 +1163,105 @@ Example API-Token Missmatch (403)
   "failed": 0,
   "message": "Success to create new token, Data was found 1",
   "primary_key": "token",
-  "type": "string",
+  "type": "list",
   "count": 1,
-  "data": "nsnBr17E8kxX08nIPP620zIRtQ23TdrS141IYpur35"
+  "data": [
+      {
+          "token": "0kuXH29ZIxrH09yKYqc20symme21uMRVl20FdZ6W22",
+          "token_type": "GUEST"
+      }
+  ]
+}
+
+atau
+
+{
+    "status": "true",
+    "success": 1,
+    "failed": 0,
+    "message": "Success to create new token, Data was found 1",
+    "primary_key": "token",
+    "type": "list",
+    "count": 1,
+    "data": [
+        {
+            "token": "E1fnV29oJJR309dYyB220MbOLC214mA1F216B5Pv07",
+            "id_hotel": "2",
+            "id_privilage": "1",
+            "privilage_name": "Super User",
+            "division_name": "Test",
+            "token_type": "HOTEL_USER"
+        }
+    ]
+}
+</pre>
+                                  </div>
+                                </div>
+                              </div>
+                            </section>
+                            <section id="loginiptv" class="tm-section">
+                                <header>
+                                    <h2 class="tm-blue-text tm-welcome-title tm-margin-b-45">Token IPTV</h2>
+                                </header>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="card" style="padding: 20px;">
+                                      <b class="btn btn-success">POST</b> <strong><?=$DOMAIN?>/api/TokenIptv</strong>
+                                      <p>Digunakan untuk mengambil token iptv yang akan digunakan untuk websocket dengan mengirimkan id_hotel</p>
+                                      <hr>
+                                        <h4>Request Header: </h4>
+                                        <hr>
+                                        <table border="1" width="100%">
+                                        <tr>
+                                          <th>Content-Type</th>
+                                          <th>Useable</th>
+                                        </tr>
+                                        <tr>
+                                          <td>application/x-www-form-urlencoded</td>
+                                          <td><span class="btn btn-success btn-block">ALLOW</span></td>
+                                        </tr>
+                                        <tr>
+                                          <td>application/json</td>
+                                          <td><span class="btn btn-success btn-block">ALLOW</span></td>
+                                        </tr>
+                                        <tr>
+                                          <td>multipart/form-data</td>
+                                          <td><span class="btn btn-success btn-block">ALLOW</span></td>
+                                        </tr>
+                                        </table>
+                                        <hr>
+                                        <h4>Request Body: </h4>
+                                        <hr>
+                                        <table border="1" width="100%">
+                                        <tr>
+                                          <th>Key</th>
+                                          <th>Example / Value</th>
+                                          <th>Required?</th>
+                                        </tr>
+                                        <tr>
+                                          <td>id_hotel</td>
+                                          <td>(Ambil dan pilih dari <strong><?=$DOMAIN?>/api/GetHotel</strong>)</td>
+                                          <td><span class="btn btn-success btn-block">YES</span></td>
+                                        </tr>
+                                        </table>
+                                        <hr>
+                                        <h4>Response Body: </h4>
+                                        <hr>
+<pre>
+{
+  "status": "true",
+  "success": 1,
+  "failed": 0,
+  "message": "Success to create new token, Data was found 1",
+  "primary_key": "token",
+  "type": "list",
+  "count": 1,
+  "data": [
+      {
+          "token": "0kuXH29ZIxrH09yKYqc20symme21uMRVl20FdZ6W22",
+          "token_type": "IPTV"
+      }
+  ]
 }
 </pre>
                                   </div>
@@ -6781,6 +7109,20 @@ Example API-Token Missmatch (403)
                                       <td><span class="btn btn-success btn-block">YES</span></td>
                                     </tr>
                                     <tr>
+                                      <td>open_time</td>
+                                      <td>time</td>
+                                      <td>00:00:00</td>
+                                      <td><span class="btn btn-success btn-block">YES</span></td>
+                                      <td><span class="btn btn-success btn-block">YES</span></td>
+                                    </tr>
+                                    <tr>
+                                      <td>close_time</td>
+                                      <td>time</td>
+                                      <td>23:59:59</td>
+                                      <td><span class="btn btn-success btn-block">YES</span></td>
+                                      <td><span class="btn btn-success btn-block">YES</span></td>
+                                    </tr>
+                                    <tr>
                                       <td>created_at</td>
                                       <td>timestamp</td>
                                       <td>(AUTO STAMP after Create)</td>
@@ -7543,6 +7885,8 @@ Example API-Token Missmatch (403)
             "birthdate": "1995-03-06",
             "photo": "maxresdefault.jpg",
             "scan_ktp": "Untitled.png",
+            "username": "mrseptian",
+            "password": "$2y$10$/PVS0sDQzFEsTr4waAf6zejtuoDEbzlcuba8WS7h5t8PryPKsn.Wm",
             "created_at": "2020-08-05T04:59:00.000000Z",
             "updated_at": "2020-08-05T05:01:31.000000Z"
         },
@@ -7561,6 +7905,8 @@ Example API-Token Missmatch (403)
             "birthdate": "",
             "photo": "GUESTPHOTO200806010353000000.png",
             "scan_ktp": "KTP200806061735000000.png",
+            "username": "",
+            "password": "",
             "created_at": "2020-08-06T12:54:07.000000Z",
             "updated_at": "2020-08-06T18:17:35.000000Z"
         }
@@ -7724,6 +8070,20 @@ Example API-Token Missmatch (403)
                                       <td>(Upload Gambar)</td>
                                       <td><span class="btn btn-success btn-block">YES</span></td>
                                       <td><span class="btn btn-success btn-block">YES</span></td>
+                                    </tr>
+                                    <tr>
+                                      <td>username</td>
+                                      <td>STRING(200)</td>
+                                      <td>test12345</td>
+                                      <td><span class="btn btn-danger btn-block">NO</span></td>
+                                      <td><span class="btn btn-danger btn-block">NO</span></td>
+                                    </tr>
+                                    <tr>
+                                      <td>password</td>
+                                      <td>test12345</td>
+                                      <td></td>
+                                      <td><span class="btn btn-danger btn-block">NO</span></td>
+                                      <td><span class="btn btn-danger btn-block">NO</span></td>
                                     </tr>
                                     <tr>
                                       <td>created_at</td>

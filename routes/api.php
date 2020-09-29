@@ -65,6 +65,7 @@ Route::post('/GetKabupaten','Kabupaten_Controller@read');
 Route::post('/GetKecamatan','Kecamatan_Controller@read');
 Route::post('/GetKelurahan','Kelurahan_Controller@read');
 
+Route::post('/TokenIptv', 'Login_Controller@iptv_token');
 Route::post('/Login', 'Login_Controller@login');
 Route::post('/GetUser', 'User_Controller@read');
 Route::post('/PostGuest', 'Guest_Controller@create');

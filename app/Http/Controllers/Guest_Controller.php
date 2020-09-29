@@ -297,6 +297,8 @@ class Guest_Controller extends Controller
             'birthdate'=>@$request_body->birthdate,
             'photo'=>@$file_photo,
             'scan_ktp'=>@$file_scan_ktp,
+            'username'=>@$request_body->username,
+            'password'=>@password_hash(@$request_body->password, PASSWORD_DEFAULT),
           ]);
         }
         catch(\Illuminate\Database\QueryException $e)
